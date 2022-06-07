@@ -1,0 +1,94 @@
+{
+  "name": "react-hotel-reservation-system",
+  "version": "0.1.0",
+  "author": {
+    "name": "Obada Qawwas",
+    "email": "info@onyxdev.net",
+    "url": "https://onyxdev.net"
+  },
+  "homepage": "https://onyxdev.net/",
+  "engines": {
+    "node": "^14.17.0"
+  },
+  "private": true,
+  "dependencies": {
+    "@nfteyez/sol-rayz": "^0.10.2",
+    "@solana/wallet-adapter-base": "^0.9.5",
+    "@solana/wallet-adapter-react": "^0.15.4",
+    "@solana/wallet-adapter-react-ui": "^0.9.6",
+    "@solana/wallet-adapter-wallets": "^0.16.0",
+    "@solana/web3.js": "^1.42.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@toruslabs/eccrypto": "^1.1.8",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^12.20.15",
+    "@types/react": "^17.0.13",
+    "@types/react-dom": "^17.0.8",
+    "@types/react-select": "^4.0.16",
+    "@types/validator": "^13.6.1",
+    "assert": "^2.0.0",
+    "axios": "^0.21.1",
+    "bootstrap": "^5.1.3",
+    "crypto-browserify": "^3.12.0",
+    "fs": "^0.0.1-security",
+    "https-browserify": "^1.0.0",
+    "imask": "^6.1.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.3",
+    "os": "^0.1.2",
+    "os-browserify": "^0.3.0",
+    "react": "^17.0.2",
+    "react-bootstrap": "^2.4.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "^5.0.0",
+    "react-select": "^4.3.1",
+    "redux": "^4.1.0",
+    "redux-saga": "^1.1.3",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "typescript": "^4.6.4",
+    "validator": "^13.6.0",
+    "web-vitals": "^1.1.2",
+    "webpack": "^5.72.0"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm rebuild node-sass && npm install --unsafe-perm -f node-sass"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.170",
+    "@types/react-datepicker": "^4.4.1",
+    "@types/react-transition-group": "^4.4.1",
+    "express": "^4.18.1",
+    "node-sass": "^6.0.1",
+    "path": "^0.12.7",
+    "react-app-rewired": "^2.2.1",
+    "redux-devtools-extension": "^2.13.9"
+  }
+}
