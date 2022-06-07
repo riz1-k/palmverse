@@ -377,6 +377,7 @@ import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import './sol.css'
 import { Modal } from 'react-bootstrap'
 import { getParsedNftAccountsByOwner, isValidSolanaAddress, createConnectionConfig, } from "@nfteyez/sol-rayz"
+import axios from 'axios';
 
 const shopAddress = new PublicKey('HekSQzW1Yx7hiGqk41iSy8bcELLHvWn34fUe5ukyDya1')
 
@@ -419,7 +420,28 @@ function SolanaPay() {
     }
 
     getAllNftData()
-  }, [connection, publicKey])
+  }, [connection, publicKey]);
+
+  useEffect(() => {
+    if (walletId) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify(walletId);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch("http://localhost:4000/api/auth", requestOptions)
+        .then(response => response.json())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+    }
+  }, [walletId])
 
 
   useEffect(() => {
@@ -455,8 +477,6 @@ function SolanaPay() {
       })
     );
 
-
-
     const signature = await sendTransaction(transaction, connection).then((res) => {
       id = res;
       setTID(res);
@@ -481,7 +501,7 @@ function SolanaPay() {
       }
       axios.post(`http://localhost:4000/api/newBooking`, body).then((res) => {
         console.log('Booking has been recorded', res);
-      })
+      });
     }).catch(err => {
       alert('Something went wrong');
       console.error(err)
