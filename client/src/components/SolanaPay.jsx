@@ -774,7 +774,7 @@ function SolanaPay() {
     const getAllNftData = async () => {
       try {
         if (connection && publicKey) {
-          setWalletId(publicKey._bn.words.toString())
+
           const connect = await createConnectionConfig(clusterApiUrl("devnet"))
           const result = await isValidSolanaAddress(publicKey);
           console.log(connect);
@@ -794,6 +794,12 @@ function SolanaPay() {
 
     getAllNftData()
   }, [connection, publicKey])
+
+  useEffect(() => {
+    if (publicKey) {
+      setWalletId(publicKey._bn.words.toString())
+    }
+  }, [publicKey])
 
 
   useEffect(() => {
