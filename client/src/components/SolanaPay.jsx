@@ -761,9 +761,11 @@ function SolanaPay() {
 
   useEffect(() => {
     if (walletId) {
+      console.log("walletId exists");
       axios.post("http://localhost:4000/api/auth", { walletId })
-        .then(response => response.json())
-        .then(result => console.log(result))
+        .then(response => {
+          console.log('response recieved', response);
+        })
         .catch(error => console.log('error', error));
     }
   }, [walletId])
@@ -823,16 +825,8 @@ function SolanaPay() {
       id = res;
       setTID(res);
       setShow(true);
-
-    }).catch(err => {
-      // alert('Something went wrong')
-      console.error(err);
-    })
-
-    await connection.confirmTransaction(signature, 'processed').then((response) => {
-      console.log(response);
       const body = {
-        walletId: publicKey,
+        walletId: walletId,
         bookingInfo: {
           dateIn: cart.checkin,
           dateOut: cart.checkout,
@@ -843,7 +837,15 @@ function SolanaPay() {
       }
       axios.post(`http://localhost:4000/api/newBooking`, body).then((res) => {
         console.log('Booking has been recorded', res);
-      });
+      }).catch(err => console.error(err))
+    }).catch(err => {
+      // alert('Something went wrong')
+      console.error(err);
+    })
+
+    await connection.confirmTransaction(signature, 'processed').then((response) => {
+      console.log(response);
+
     }).catch(err => {
       alert('Something went wrong');
       console.error(err)
@@ -865,10 +867,10 @@ function SolanaPay() {
       })
       .catch(error => console.log('error', error));
 
-    setTimeout(getPrice, 500)
+    setTimeout(getPrice, 10000)
   }
 
-  getPrice();
+  useEffect(() => getPrice(), [])
 
 
   useEffect(() => {
