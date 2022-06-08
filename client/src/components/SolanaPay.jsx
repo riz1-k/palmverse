@@ -837,19 +837,15 @@ function SolanaPay() {
       }
       axios.post(`http://localhost:4000/api/newBooking`, body).then((res) => {
         console.log('Booking has been recorded', res);
-      }).catch(err => console.error(err))
+      }).catch(err => {
+        alert('Error while Registering the booking info');
+        console.error('booking error', err)
+      })
     }).catch(err => {
-      // alert('Something went wrong')
       console.error(err);
     })
 
-    await connection.confirmTransaction(signature, 'processed').then((response) => {
-      console.log(response);
-
-    }).catch(err => {
-      alert('Something went wrong');
-      console.error(err)
-    })
+    await connection.confirmTransaction(signature, 'processed')
   }, [publicKey, sendTransaction, connection]);
 
 
