@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.auth = (req, res) => {
   const { walletId } = req.body;
+  console.log(walletId);
   if (!walletId) {
     return res.status(400).json({ msg: 'No wallet ID' });
   }
@@ -39,7 +40,7 @@ exports.auth = (req, res) => {
         .populate('bookings')
         .exec((err, wallet) => {
           if (err) {
-            console.error(err);
+            console.log(err);
           }
           jwt.sign(
             {
