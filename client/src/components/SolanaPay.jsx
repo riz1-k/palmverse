@@ -741,7 +741,7 @@ import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import './sol.css'
 import { Modal } from 'react-bootstrap'
 import { getParsedNftAccountsByOwner, isValidSolanaAddress, createConnectionConfig, } from "@nfteyez/sol-rayz"
-
+import axios from 'axios';
 const shopAddress = new PublicKey('HekSQzW1Yx7hiGqk41iSy8bcELLHvWn34fUe5ukyDya1')
 
 function SolanaPay() {
@@ -756,6 +756,7 @@ function SolanaPay() {
   const [closed, setClosed] = useState(false);
   const [a, setA] = useState();
   const [nfts, setNfts] = useState([])
+  const [walletId, setWalletId] = useState('')
   let id;
 
   useEffect(() => {
@@ -771,7 +772,7 @@ function SolanaPay() {
     const getAllNftData = async () => {
       try {
         if (connection && publicKey) {
-
+          setWalletId(publicKey._bn.words.toString())
           const connect = await createConnectionConfig(clusterApiUrl("devnet"))
           const result = await isValidSolanaAddress(publicKey);
           console.log(connect);
