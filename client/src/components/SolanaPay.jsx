@@ -1,6 +1,8 @@
+import axios from 'axios';
+import moment from 'moment';
 import { useEffect, useState, useCallback } from 'react';
 import { useCart } from 'hooks'
-import { PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, clusterApiUrl } from '@solana/web3.js';
+import { PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, clusterApiUrl, } from '@solana/web3.js';
 import image from '../components/pay.png'
 import {
   useConnection,
@@ -13,302 +15,23 @@ import {
 import styleClasses from '../components/ReservationDetails/ReservationTotals/ReservationTotals.module.scss'
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import './sol.css'
-import { Modal, DropdownButton, Dropdown, Table, Card } from 'react-bootstrap'
-import { getParsedNftAccountsByOwner, isValidSolanaAddress, createConnectionConfig, } from "@nfteyez/sol-rayz"
-import axios from 'axios';
-import moment from 'moment';
+import { getParsedNftAccountsByOwner, createConnectionConfig, } from "@nfteyez/sol-rayz"
+
+
+import CurrentBookings from './Solpay/Modals/CurrentBookings';
+import PreviousBookings from './Solpay/Modals/PreviousBookings';
+import ReceiptModal from './Solpay/Modals/ReceiptModal';
+import NftModal from './Solpay/Modals/NftModal';
+import Navbar from './Solpay/Navbar';
+
 const shopAddress = new PublicKey('HekSQzW1Yx7hiGqk41iSy8bcELLHvWn34fUe5ukyDya1')
-
-
-function ReceiptModal(props) {
-  return (<Modal show={props.show} onHide={() => {
-    props.setShow(false);
-    props.setClosed(true);
-    window.location.href = "/";
-  }}>
-    <Modal.Header closeButton>Successful Transaction!</Modal.Header>
-    <Modal.Title style={{
-      fontSize: "20px",
-      marginLeft: "6px",
-      padding: "20px 10px"
-    }}>Thank you for your reservation at Palmverse !</Modal.Title>
-    <div className='code' style={{
-      width: "95%"
-    }}>
-
-      <Modal.Body className='code2' style={{
-        overflowX: "scroll"
-      }}>Your transaction ID is :<code> {props.tID}</code> </Modal.Body>
-    </div>
-    <button style={{
-      backgroundColor: "skyblue",
-      width: "fit-content",
-      margin: "auto",
-      padding: "6px",
-      borderRadius: "4px",
-      marginBottom: "16px"
-    }} onClick={() => {
-      navigator.clipboard.writeText(props.tID);
-      alert('Transaction ID copied to your clipboard');
-    }}>Copy Transaction ID</button>
-
-    <Modal.Footer>You can check your recently made transaction on <a href="https://solscan.io" target='_blank'>www.solscan.io</a> </Modal.Footer>
-  </Modal>);
-}
-
-
-function PreviousBookings(props) {
-  return (<Modal show={props.prevTransOpen} onHide={() => {
-    props.setPrevTransOpen(false);
-  }} size='lg'>
-    <Modal.Header closeButton><p style={{
-      fontSize: "1.2rem",
-      fontWeight: "bolder",
-      lineHeight: "2rem"
-    }}>Your Previous Bookings</p></Modal.Header>
-    <div style={{
-      padding: "1rem",
-      maxHeight: "90vh",
-      overflowY: "scroll"
-    }}>
-
-      {
-        props.previousBookings.length > 0 ? (
-
-          <Table striped bordered responsive hover>
-            <thead style={{
-              padding: "5rem"
-            }}>
-              <tr>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>No.</th>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>Date In</th>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>Date Out</th>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>Hotel Name</th>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>City</th>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>Price</th>
-                <th style={{
-                  padding: "0.5rem 1rem",
-                  width: "1.2rem",
-                  textAlign: "center"
-                }}>Transaction Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {props.previousBookings.map((booking, index) => {
-                return <tr>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{index + 1}</td>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{moment(booking.dateIn).format('L')}</td>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{moment(booking.dateOut).format('L')}</td>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{booking.hotelName}</td>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{booking.hotelCity}</td>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{booking.price}<span style={{
-                    paddingLeft: "8px"
-                  }}>SOL</span></td>
-                  <td style={{
-                    padding: "0.5rem 1.2rem",
-                    width: "1.2rem",
-                    textAlign: "left"
-                  }}>{moment(booking.created_at).format('L')}</td>
-                </tr>;
-              })}
-            </tbody>
-          </Table>
-        ) : (<div style={{
-          textAlign: 'center',
-          display: "flex",
-          justifyContent: "center",
-          padding: "2rem",
-          fontSize: "20px"
-        }} className={styleClasses['reservation-details__totals__item']}>
-          <span className={styleClasses['reservation-details__totals__title']}>
-            No Previous Bookings found in your wallet
-          </span>
-
-
-        </div>)
-      }
-
-    </div>
-  </Modal>);
-}
-
-
-
-function CurrentBookings(props) {
-  return (<Modal show={props.currentTransOpen} onHide={() => {
-    props.setCurrentTransOpen(false);
-  }} size='lg'>
-    <Modal.Header closeButton><p style={{
-      fontSize: "1.2rem",
-      fontWeight: "bolder",
-      lineHeight: "2rem"
-    }}>Your Current Bookings</p></Modal.Header>
-    <div style={{
-      padding: "1rem",
-      maxHeight: "90vh",
-      overflowY: "scroll"
-    }}>
-
-      {
-        props.currentBookings ? (<Table striped bordered responsive hover>
-          <thead style={{
-            padding: "5rem"
-          }}>
-            <tr>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>No.</th>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>Date In</th>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>Date Out</th>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>Hotel Name</th>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>City</th>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>Price</th>
-              <th style={{
-                padding: "0.5rem 1rem",
-                width: "1.2rem",
-                textAlign: "center"
-              }}>Transaction Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {props.currentBookings.map((booking, index) => {
-              return <tr>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{index + 1}</td>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{moment(booking.dateIn).format('L')}</td>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{moment(booking.dateOut).format('L')}</td>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{booking.hotelName}</td>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{booking.hotelCity}</td>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{booking.price}<span style={{
-                  paddingLeft: "8px"
-                }}>SOL</span></td>
-                <td style={{
-                  padding: "0.5rem 1.2rem",
-                  width: "1.2rem",
-                  textAlign: "left"
-                }}>{moment(booking.created_at).format('L')}</td>
-              </tr>;
-            })}
-          </tbody>
-        </Table>) : (<div style={{
-          textAlign: 'center',
-          display: "flex",
-          justifyContent: "center",
-          padding: "2rem",
-          fontSize: "20px"
-        }} className={styleClasses['reservation-details__totals__item']}>
-          <span className={styleClasses['reservation-details__totals__title']}>
-            No Current Bookings found in your wallet
-          </span>
-
-
-        </div>)
-      }
-
-
-    </div>
-  </Modal>);
-}
 
 
 function SolanaPay() {
   const [solanaRate, setSolanaRate] = useState(0)
   const { totals, cart } = useCart();
   const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+  const { publicKey, sendTransaction, connected } = useWallet();
   const totalAmount = totals.total.toFixed(2);
   const key = localStorage.getItem('value');
   const [show, setShow] = useState(false);
@@ -322,22 +45,26 @@ function SolanaPay() {
   const [currentBookings, setCurrentBookings] = useState([])
   const [walletId] = useState(localStorage.getItem('walletId') && localStorage.getItem('walletId'));
   const [nftImages, setNftImages] = useState([]);
-  const [nftOpen, setNftOpen] = useState(false)
+  const [nftOpen, setNftOpen] = useState(false);
+  const [hasNfts, setHasNfts] = useState(false)
   let id;
 
   useEffect(() => {
-    axios.post("http://localhost:4000/api/auth", { walletId }).then(res => {
-      res.data.user.bookings.map(x => {
-        const bookingDate = moment(x.dateOut).format('L')
-        const currentDate = new Date().toLocaleDateString();
-        if (bookingDate >= moment(currentDate).format('L')) {
-          setCurrentBookings(e => [...e, x])
+    if (walletId) {
 
-        } else {
-          setpreviousBookings([...previousBookings, x]);
-        }
-      })
-    }).catch(error => console.error('wallet login error', error));
+      axios.post("http://localhost:4000/api/auth", { walletId }).then(res => {
+        res.data.user.bookings.forEach(x => {
+          const bookingDate = moment(x.dateOut).format('L')
+          const currentDate = new Date().toLocaleDateString();
+          if (bookingDate >= moment(currentDate).format('L')) {
+            setCurrentBookings(e => [...e, x])
+
+          } else {
+            setpreviousBookings([...previousBookings, x]);
+          }
+        })
+      }).catch(error => console.error('wallet login error', error));
+    }
   }, [walletId])
 
   useEffect(() => {
@@ -351,10 +78,10 @@ function SolanaPay() {
             connection: connect,
             serialization: true,
           })
-          console.log(rawNfts);
-          rawNfts.map(nft => {
+          rawNfts.forEach(nft => {
             if (nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
-              setNfts(e => [...e, nft])
+              setNfts(e => [...e, nft]);
+              setHasNfts(true)
             }
           })
           return nfts;
@@ -372,8 +99,6 @@ function SolanaPay() {
     }
   }, [publicKey, connection])
 
-  useEffect(() => console.log(nftImages), [nftImages])
-
   useEffect(() => {
     if (closed) {
       localStorage.clear();
@@ -384,7 +109,7 @@ function SolanaPay() {
   useEffect(() => {
     if (nfts) {
       let images = []
-      nfts.map(nft => {
+      nfts.forEach(nft => {
         const imageUrl = nft.data.uri;
         axios.get(imageUrl).then(res => {
           images.push(res.data.image)
@@ -402,9 +127,11 @@ function SolanaPay() {
 
   const hotel = hotels[key - 1];
   let roomPrice = totals.room / solanaRate;
-  const pay = useCallback(async () => {
+
+
+  const pay = async () => {
     let amount;
-    if (nfts.length > 0) {
+    if (hasNfts) {
       amount = (a.toFixed(3) - (a.toFixed(3) * .30))
     } else {
       amount = parseFloat(a.toFixed(3))
@@ -431,7 +158,7 @@ function SolanaPay() {
           dateOut: cart.checkout,
           hotelName: hotel.hotel_name,
           hotelCity: hotel.city,
-          price: parseFloat(a.toFixed(3))
+          price: amount,
         }
       }
 
@@ -446,7 +173,7 @@ function SolanaPay() {
       console.error(err);
     })
 
-  }, [publicKey, sendTransaction, connection]);
+  }
 
 
   const getPrice = () => {
@@ -468,8 +195,6 @@ function SolanaPay() {
 
   useEffect(() => getPrice(), []);
 
-  console.log(nfts)
-
 
   useEffect(() => {
     setA(totalAmount / solanaRate)
@@ -477,72 +202,14 @@ function SolanaPay() {
 
   return (
     <div className='solcontainer' >
+
       <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
       <ReceiptModal show={show} setShow={setShow} tID={tID} setClosed={setClosed} />
       <CurrentBookings currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
-      <Modal show={nftOpen} onHide={() => {
-        setNftOpen(false);
-      }} size='lg'>
-        <Modal.Header closeButton><p style={{
-          fontSize: "1.2rem",
-          fontWeight: "bolder",
-          lineHeight: "2rem"
-        }}>NFTs in your Wallet</p></Modal.Header>
-        <Modal.Body>
-          {
-            nfts && nftImages.length > 0 ? (<div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly", alignItems: "center" }}>
-              {
-                nftImages.map((nft, index) => {
-                  return <>
-                    <Card style={{ width: "fit-content", margin: "1rem" }} >
-                      <Card.Img variant='top' src={nft} alt={`Nft no.${index + 1}`} style={{ height: "140px", width: "140px" }} />
-                      <Card.Title style={{ textAlign: "center" }} >{nfts[index].data.name}</Card.Title>
-                    </Card>
+      <NftModal nfts={nfts} nftImages={nftImages} nftOpen={nftOpen} setNftOpen={setNftOpen}></NftModal>
 
-                  </>
+      <Navbar publicKey={publicKey} setPrevTransOpen={setPrevTransOpen} setCurrentTransOpen={setCurrentTransOpen} setNftOpen={setNftOpen}></Navbar>
 
-                })
-              }
-            </div>) : (<div style={{
-              textAlign: 'center',
-              display: "flex",
-              justifyContent: "center",
-              padding: "2rem",
-              fontSize: "20px"
-            }} className={styleClasses['reservation-details__totals__item']}>
-              <span className={styleClasses['reservation-details__totals__title']}>
-                No Palmverse NFTs in your wallet
-              </span>
-
-
-            </div>)
-          }
-
-        </Modal.Body>
-        <div style={{
-          padding: "1rem",
-          maxHeight: "90vh",
-          overflowY: "scroll"
-        }}>
-
-
-
-        </div>
-      </Modal>
-      <nav className='head'>
-
-        <div style={{ display: 'flex', justifyContent: "space-between", alignItems: "center", width: "90%", margin: "auto", position: "relative", padding: "12px 0" }}>
-          <div ></div>
-          <h1 style={{ position: "absolute", left: "42%" }} >
-            Pay via Solana
-          </h1>
-          <DropdownButton style={{ opacity: !publicKey && "0" }} title="Palmverse Wallet" >
-            <Dropdown.Item onClick={() => setCurrentTransOpen(true)} >Current Bookings</Dropdown.Item>
-            <Dropdown.Item onClick={() => setPrevTransOpen(true)} >Previous Bookings</Dropdown.Item>
-            <Dropdown.Item onClick={() => setNftOpen(true)} >View NFTs</Dropdown.Item>
-          </DropdownButton>
-        </div>
-      </nav>
       <div className='body' >
 
         <div>
@@ -593,6 +260,7 @@ function SolanaPay() {
         </div>
 
         <button
+          disabled={connected ? false : true}
           onClick={() => pay()}
           style={{ border: 'none', outline: 'none', padding: 0, marginTop: "2rem" }}
         >
@@ -706,8 +374,6 @@ function SolanaPay() {
                   >
                     No Palmverse NFTs have been found in your wallet
                   </span>
-
-
                 </div>
               )
             }
