@@ -141,7 +141,8 @@ function SolanaPay() {
       SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: shopAddress,
-        lamports: LAMPORTS_PER_SOL * amount,
+        lamports: parseFloat(LAMPORTS_PER_SOL * amount),
+        // lamports: 1,
       })
     );
 
