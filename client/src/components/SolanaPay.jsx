@@ -43,14 +43,13 @@ function SolanaPay() {
   const [currentTransOpen, setCurrentTransOpen] = useState(false);
   const [previousBookings, setpreviousBookings] = useState([])
   const [currentBookings, setCurrentBookings] = useState([])
-  const [walletId] = useState(localStorage.getItem('walletId') && localStorage.getItem('walletId'));
   const [nftImages, setNftImages] = useState([]);
   const [nftOpen, setNftOpen] = useState(false);
   const [hasNfts, setHasNfts] = useState(false)
   let id;
 
   useEffect(() => {
-    if (walletId && connected && publicKey) {
+    if (connected && publicKey) {
 
       axios.post("http://localhost:4000/api/auth", { walletId: publicKey.toString() }).then(res => {
         res.data.user.bookings.forEach(x => {
@@ -65,7 +64,7 @@ function SolanaPay() {
         })
       }).catch(error => console.error('wallet login error', error));
     }
-  }, [walletId])
+  }, [connected])
 
   useEffect(() => {
     const getAllNftData = async () => {
@@ -154,7 +153,7 @@ function SolanaPay() {
       setShow(true);
 
       const body = {
-        walletId: walletId ? walletId : localStorage.getItem('walletId'),
+        walletId: publicKey.toString(),
         bookingInfo: {
           dateIn: cart.checkin,
           dateOut: cart.checkout,
