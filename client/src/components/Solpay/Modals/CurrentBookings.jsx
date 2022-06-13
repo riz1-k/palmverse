@@ -17,7 +17,7 @@ export default function CurrentBookings(props) {
         }}>
 
             {
-                props.currentBookings ? (<Table striped bordered responsive hover>
+                props.currentBookings.length > 0 ? (<Table striped bordered responsive hover>
                     <thead style={{
                         padding: "5rem"
                     }}>
@@ -99,7 +99,7 @@ export default function CurrentBookings(props) {
                                     width: "1.2rem",
                                     textAlign: "left"
                                 }}>{moment(booking.created_at).format('L')}</td>
-                            </tr>;
+                            </tr>
                         })}
                     </tbody>
                 </Table>) : (<div style={{

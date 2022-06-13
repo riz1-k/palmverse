@@ -1,8 +1,8 @@
 import axios from 'axios';
 import moment from 'moment';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from 'hooks'
-import { PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, clusterApiUrl, } from '@solana/web3.js';
+import { PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, clusterApiUrl } from '@solana/web3.js';
 import image from '../components/pay.png'
 import {
   useConnection,
@@ -50,9 +50,9 @@ function SolanaPay() {
   let id;
 
   useEffect(() => {
-    if (walletId) {
+    if (walletId && connected && publicKey) {
 
-      axios.post("http://localhost:4000/api/auth", { walletId }).then(res => {
+      axios.post("http://localhost:4000/api/auth", { walletId: publicKey.toString() }).then(res => {
         res.data.user.bookings.forEach(x => {
           const bookingDate = moment(x.dateOut).format('L')
           const currentDate = new Date().toLocaleDateString();
@@ -94,8 +94,8 @@ function SolanaPay() {
   }, [connection, publicKey])
 
   useEffect(() => {
-    if (publicKey) {
-      localStorage.setItem('walletId', publicKey._bn.words.toString())
+    if (publicKey && connected) {
+      localStorage.setItem('walletId', publicKey.toString())
     }
   }, [publicKey, connection])
 
@@ -136,6 +136,7 @@ function SolanaPay() {
     } else {
       amount = parseFloat(a.toFixed(3))
     }
+    console.log(amount)
     if (!publicKey) throw new WalletNotConnectedError();
     const transaction = new Transaction().add(
       SystemProgram.transfer({
