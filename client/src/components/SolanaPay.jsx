@@ -26,7 +26,6 @@ import Navbar from './Solpay/Navbar';
 
 const shopAddress = new PublicKey('HekSQzW1Yx7hiGqk41iSy8bcELLHvWn34fUe5ukyDya1')
 
-
 function SolanaPay() {
   const [solanaRate, setSolanaRate] = useState(0)
   const { totals, cart } = useCart();
@@ -142,7 +141,7 @@ function SolanaPay() {
         fromPubkey: publicKey,
         toPubkey: shopAddress,
         lamports: parseFloat(LAMPORTS_PER_SOL * amount),
-        // lamports: 1,
+        lamports: 1,
       })
     );
 
@@ -154,13 +153,17 @@ function SolanaPay() {
 
       const body = {
         walletId: publicKey.toString(),
+        transactionId: res,
+        to: shopAddress.toString(),
+        lamports: 1,
+        // lamports: LAMPORTS_PER_SOL * amount,
         bookingInfo: {
           dateIn: cart.checkin,
           dateOut: cart.checkout,
           hotelName: hotel.hotel_name,
           hotelCity: hotel.city,
           price: amount,
-        }
+        },
       }
 
       axios.post(`http://localhost:4000/api/newBooking`, body).then((res) => {
@@ -204,8 +207,8 @@ function SolanaPay() {
   return (
     <div className='solcontainer' >
 
-      <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
       <ReceiptModal show={show} setShow={setShow} tID={tID} setClosed={setClosed} />
+      <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
       <CurrentBookings currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
       <NftModal nfts={nfts} nftImages={nftImages} nftOpen={nftOpen} setNftOpen={setNftOpen}></NftModal>
 

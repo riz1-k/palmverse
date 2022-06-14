@@ -33,7 +33,7 @@ function MainRouter() {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect={false}>
+      <WalletProvider wallets={wallets} autoConnect={true}>
         <BrowserRouter>
           <Routes>
             <Route element={<App />} index path="/" />
