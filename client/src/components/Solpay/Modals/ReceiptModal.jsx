@@ -33,6 +33,6 @@ export default function ReceiptModal(props) {
             alert('Transaction ID copied to your clipboard');
         }}>Copy Transaction ID</button>
 
-        <Modal.Footer><p style={{ marginRight: "20px" }} >You can verify your transaction here <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> explorer.solana.com</a></p> </Modal.Footer>
+        <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p  >You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.Footer>
     </Modal>);
 }
