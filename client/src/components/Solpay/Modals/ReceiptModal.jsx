@@ -1,6 +1,4 @@
 import { Modal, Table } from 'react-bootstrap'
-import styleClasses from '../../ReservationDetails/ReservationTotals/ReservationTotals.module.scss'
-import moment from 'moment';
 export default function ReceiptModal(props) {
     return (<Modal show={props.show} onHide={() => {
         props.setShow(false);
@@ -33,6 +31,6 @@ export default function ReceiptModal(props) {
             alert('Transaction ID copied to your clipboard');
         }}>Copy Transaction ID</button>
 
-        <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p  >You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.Footer>
+        <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.Footer>
     </Modal>);
 }

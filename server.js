@@ -12,9 +12,12 @@ const app = express();
 app.use(bodyparser.json());
 app.use(cors());
 app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, 'client/build')));
 mongo();
-
 app.use('/api', require('./server/routes/routes'));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 app.listen(process.env.PORT || 4000, () =>
   console.log(
