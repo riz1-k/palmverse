@@ -8,6 +8,10 @@ exports.newBooking = async (req, res) => {
   const { walletId, bookingInfo, transactionId, to, lamports } =
     req.body;
 
+  let transactionExists = await Booking.findOne({
+    transactionId,
+  }).exec();
+
   const verifyPay = async () => {
     var data = JSON.stringify({
       method: 'getConfirmedTransaction',
@@ -66,8 +70,14 @@ exports.newBooking = async (req, res) => {
 
   if (!walletId || !bookingInfo) {
     return res
-      .status(400)
+      .status(401)
       .json({ msg: 'No walletId or Booking Details' });
+  }
+
+  if (transactionExists) {
+    return res
+      .status(403)
+      .json({ msg: 'Duplicate Transaction found' });
   }
 
   User.findOne({ walletId })
@@ -79,12 +89,17 @@ exports.newBooking = async (req, res) => {
       if (user) {
         const a = await verifyPay();
         if (!a) {
+          console.log('unverified');
           return res
-            .status(500)
+            .status(400)
             .json({ msg: 'Unverified transaction' });
         }
-        const newBook = await Booking.create(bookingInfo);
+        const newBook = await Booking.create({
+          ...bookingInfo,
+          transactionId,
+        });
         const savedBooking = await newBook.save();
+
         user.bookings.push(savedBooking);
         user.save();
         return res.status(200).json({

@@ -141,7 +141,7 @@ function SolanaPay() {
         fromPubkey: publicKey,
         toPubkey: shopAddress,
         lamports: parseFloat(LAMPORTS_PER_SOL * amount),
-        // lamports: 1,
+        lamports: 1,
       })
     );
 
@@ -155,8 +155,8 @@ function SolanaPay() {
         walletId: publicKey.toString(),
         transactionId: res,
         to: shopAddress.toString(),
-        // lamports: 1,
-        lamports: LAMPORTS_PER_SOL * amount,
+        lamports: 1,
+        // lamports: LAMPORTS_PER_SOL * amount,
         bookingInfo: {
           dateIn: cart.checkin,
           dateOut: cart.checkout,
@@ -168,8 +168,8 @@ function SolanaPay() {
 
       axios.post(`http://localhost:4000/api/newBooking`, body).then((res) => {
         console.log('Booking has been recorded', res);
-      }).catch(err => {
-        alert('Error while Registering the booking info');
+      }).catch((err) => {
+        alert(res.msg);
         console.error('booking error', err)
       })
 
