@@ -57,11 +57,10 @@
     "webpack": "^5.72.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "npm rebuild node-sass && npm install --unsafe-perm -f node-sass"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -85,10 +84,8 @@
     "@types/lodash": "^4.14.170",
     "@types/react-datepicker": "^4.4.1",
     "@types/react-transition-group": "^4.4.1",
-    "express": "^4.18.1",
     "node-sass": "^6.0.1",
     "path": "^0.12.7",
-    "react-app-rewired": "^2.2.1",
     "redux-devtools-extension": "^2.13.9"
   }
 }
