@@ -75,7 +75,7 @@ export default function Navbar(props) {
     useEffect(() => {
         if (connected && publicKey) {
 
-            axios.post("http://localhost:4000/api/auth", { walletId: publicKey.toString() }).then(res => {
+            axios.post(`${process.env.REACT_APP_URL}/api/auth"`, { walletId: publicKey.toString() }).then(res => {
                 res.data.user.bookings.forEach(x => {
                     const bookingDate = moment(x.dateOut).format('L')
                     const currentDate = new Date().toLocaleDateString();
