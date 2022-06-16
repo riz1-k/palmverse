@@ -15,7 +15,7 @@ import {
 } from '@solana/wallet-adapter-react-ui';
 import moment from 'moment'
 import { Button } from 'components';
-
+import { clearStoredValues } from 'lib/scripts/utils';
 
 
 // type TypeHeader = {
@@ -130,8 +130,8 @@ export default function Navbar(props) {
         getAllNftData()
     }, [connection, publicKey])
 
-    return (<nav className='head'>
-        <div style={{
+    return (<>
+        {/* <div style={{
             display: 'flex',
             justifyContent: "space-between",
             alignItems: "center",
@@ -139,8 +139,11 @@ export default function Navbar(props) {
             margin: "auto",
             position: "relative",
             padding: "12px 0"
-        }}>
+        }}> */}
 
+
+
+        <header className={styleClasses['header']}>
             {
                 connected ? (
                     <DropdownButton style={{
@@ -160,36 +163,30 @@ export default function Navbar(props) {
                     </div>
                 )
             }
-
-
-            <div style={{ widht: "140px !important" }} >
-
-                <div style={{ width: "fit-content" }} className={styleClasses['header__logo']}>
-                    <span className={styleClasses['header__logo__title']}>PALMVERSE</span>
-                    <span className={styleClasses['header__logo__slogan']}>Pay with crypto or credit card.</span>
-                </div>
+            <div className={styleClasses['header__logo']}>
+                <span className={styleClasses['header__logo__title']}>PALMVERSE</span>
+                <span className={styleClasses['header__logo__slogan']}>Pay with crypto or credit card.</span>
             </div>
-
             {props.activeStep !== 0 && (
                 <div className={styleClasses['header__actions']}>
                     <Button
                         type="button"
                         onClick={() => {
                             props.stepChangeHandler(0, { isValid: false, inputs: {} }, 0);
-                            localStorage.clear();
-                            window.location.reload();
+                            clearStoredValues();
                         }}
                     >
                         Make a new reservation
                     </Button>
                 </div>
             )}
+        </header>
 
 
 
-        </div>
+        {/* </div>   */}
         <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
         <CurrentBookings currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
         <NftModal nfts={nfts} nftImages={nftImages} nftOpen={nftOpen} setNftOpen={setNftOpen}></NftModal>
-    </nav>);
+    </>);
 }
