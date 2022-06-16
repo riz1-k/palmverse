@@ -7,7 +7,12 @@ const useHotels = () => {
     const hotelsDetails = useSelector((state: TypeAppProps) => state.hotels.data.details);
     const cart = useSelector((state: TypeCartDetails) => state.cart);
     const roomDetails = getRoomDetails(cart, hotelsDetails);
-    const selectedHotel = hotelsNames.find((hotel: TypeHotel) => hotel.id === cart.hotelId);
+    
+    let selectedHotel;
+    
+    if(hotelsNames){
+        selectedHotel = hotelsNames.find((hotel: TypeHotel) => hotel.id === cart.hotelId);
+    }
 
     let selectedHotelDetails: TypeHotelDetails | undefined;
     if (hotelsDetails) {
