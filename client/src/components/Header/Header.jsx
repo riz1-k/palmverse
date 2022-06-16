@@ -14,6 +14,7 @@ import {
     WalletModalProvider,
 } from '@solana/wallet-adapter-react-ui';
 import moment from 'moment'
+import { Button } from 'components';
 
 
 
@@ -50,7 +51,6 @@ export default function Navbar(props) {
     const [previousBookings, setpreviousBookings] = useState([])
     const [currentBookings, setCurrentBookings] = useState([])
     const [hasNfts, setHasNfts] = useState(false)
-    // import { Button } from 'components';
     // import { clearStoredValues } from 'lib/scripts/utils';
     const [prevTransOpen, setPrevTransOpen] = useState(false);
     const [currentTransOpen, setCurrentTransOpen] = useState(false);
@@ -140,22 +140,11 @@ export default function Navbar(props) {
             position: "relative",
             padding: "12px 0"
         }}>
-            <div />
-            {/* <div style={{ marginRight: "50rem" }} className={styleClasses['header__logo']}>
-                <span className={styleClasses['header__logo__title']}>PALMVERSE</span>
-                <span className={styleClasses['header__logo__slogan']}>Pay with crypto or credit card.</span>
-            </div> */}
-            <h1 style={{
-                position: "absolute",
-                left: "42%"
-            }}>
-                PALMVERSE
-            </h1>
 
             {
                 connected ? (
                     <DropdownButton style={{
-                        opacity: !publicKey && "0"
+                        opacity: !publicKey && "0", position: "absolute", zIndex: "99", left: "2rem"
                     }} title="Palmverse Wallet">
                         <Dropdown.Item onClick={() => setCurrentTransOpen(true)}>Current Bookings</Dropdown.Item>
                         <Dropdown.Item onClick={() => setPrevTransOpen(true)}>Previous Bookings</Dropdown.Item>
@@ -163,7 +152,7 @@ export default function Navbar(props) {
                     </DropdownButton>
 
                 ) : (
-                    <div  >
+                    <div style={{ position: "absolute", zIndex: "99", left: "2rem" }} >
 
                         <WalletModalProvider>
                             <WalletMultiButton />
@@ -171,6 +160,32 @@ export default function Navbar(props) {
                     </div>
                 )
             }
+
+
+            <div style={{ widht: "140px !important" }} >
+
+                <div style={{ width: "fit-content" }} className={styleClasses['header__logo']}>
+                    <span className={styleClasses['header__logo__title']}>PALMVERSE</span>
+                    <span className={styleClasses['header__logo__slogan']}>Pay with crypto or credit card.</span>
+                </div>
+            </div>
+
+            {props.activeStep !== 0 && (
+                <div className={styleClasses['header__actions']}>
+                    <Button
+                        type="button"
+                        onClick={() => {
+                            props.stepChangeHandler(0, { isValid: false, inputs: {} }, 0);
+                            localStorage.clear();
+                            window.location.reload();
+                        }}
+                    >
+                        Make a new reservation
+                    </Button>
+                </div>
+            )}
+
+
 
         </div>
         <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>

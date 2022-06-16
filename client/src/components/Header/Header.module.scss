@@ -2,53 +2,49 @@
 @import '../../lib/styles/abstracts/_mixins.scss';
 
 .header {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+  background-color: $bg-dark-color;
+
+  @include sm {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__logo {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    padding: 0 2rem;
-    background-color: $bg-dark-color;
+    line-height: 1;
+    color: white;
+    padding: 1rem 0;
+
+    &__title {
+      text-decoration: none;
+      font-style: normal;
+      font-weight: 700;
+      font-family: Roboto;
+      position: relative;
+      margin-left: 620px;
+      margin-top: -1px;
+      color: #d025b9;
+      font-size: 40px;
+    }
+    &__slogan {
+      left: 531px;
+      font-size: 19px;
+      position: relative;
+      width: 260px;
+      color: #fcfcfc;
+      margin-left: 78px;
+      margin-top: 4px;
+    }
+  }
+  &__actions {
+    margin: 1rem auto 2rem;
 
     @include sm {
-        flex-direction: row;
-        align-items: center;
+      margin: 0 0 0 auto;
     }
-
-    &__logo {
-        display: flex;
-        flex-direction: column;
-        line-height: 1;
-        color: white;
-        padding: 1rem 0;
-
-        &__title {
-            text-decoration:none;
-            font-style:normal;
-            font-weight:700;
-            font-family:Roboto;
-            position:relative;
-            margin-left:620px;
-            margin-top:-1px; 
-            color:#d025b9;
-            font-size:40px;
-        }
-        &__slogan {
-            left:531px;
-            font-size:19px;
-            position:relative;
-            width:260px;
-            color:#fcfcfc;
-            margin-left:78px;
-            margin-top:4px;
-            
-        }
-    }
-    &__actions {
-        margin: 1rem auto 2rem;
-
-        @include sm {
-            margin: 0 0 0 auto;
-        }
-    }
-
-    
+  }
 }

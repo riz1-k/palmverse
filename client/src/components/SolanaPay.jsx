@@ -15,7 +15,7 @@ import {
 import styleClasses from '../components/ReservationDetails/ReservationTotals/ReservationTotals.module.scss'
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import './sol.css'
-import { getParsedNftAccountsByOwner, resolveToWalletAddress } from "@nfteyez/sol-rayz"
+import { getParsedNftAccountsByOwner, createConnectionConfig, } from "@nfteyez/sol-rayz"
 
 
 import CurrentBookings from './Solpay/Modals/CurrentBookings';
@@ -70,15 +70,12 @@ function SolanaPay() {
       try {
         if (connection && publicKey) {
 
-          const publicAddress = await resolveToWalletAddress({ text: publicKey.toString() });
-
-          const rawNfts = await getParsedNftAccountsByOwner({ publicAddress })
-          // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"))
-          // const rawNfts = await getParsedNftAccountsByOwner({
-          //   publicAddress: publicKey,
-          //   connection: connect,
-          //   serialization: true,
-          // })
+          const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"))
+          const rawNfts = await getParsedNftAccountsByOwner({
+            publicAddress: publicKey,
+            connection: connect,
+            serialization: true,
+          })
           rawNfts.forEach(nft => {
             if (nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
               setNfts(e => [...e, nft]);
