@@ -20,9 +20,8 @@ require('@solana/wallet-adapter-react-ui/styles.css');
 function MainRouter() {
   const network = WalletAdapterNetwork.Devnet;
 
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  // const endpoint =
-  //   'https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/';
+  // const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const endpoint = 'https://devnet.genesysgo.net/';
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
