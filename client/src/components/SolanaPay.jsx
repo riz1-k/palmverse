@@ -69,11 +69,9 @@ function SolanaPay() {
     const getAllNftData = async () => {
       try {
         if (connection && publicKey) {
-
-          const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"))
           const rawNfts = await getParsedNftAccountsByOwner({
             publicAddress: publicKey,
-            connection: connect,
+            connection: connection,
             serialization: true,
           })
           rawNfts.forEach(nft => {
