@@ -55,6 +55,7 @@ exports.newBooking = async (req, res) => {
 
     try {
       const response = await axios(config);
+      console.log('response', response);
       info = await response.data.result.transaction.message
         .instructions[0].parsed.info;
       lamFromVeri = info.lamports;
