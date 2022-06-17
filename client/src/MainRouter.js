@@ -21,8 +21,8 @@ function MainRouter() {
   const network = WalletAdapterNetwork.Devnet;
 
   // const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  const endpoint = 'https://devnet.genesysgo.net/';
-  // const endpoint = 'https://ssc-dao.genesysgo.net/';
+  // const endpoint = 'https://devnet.genesysgo.net/';
+  const endpoint = 'https://ssc-dao.genesysgo.net/';
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),

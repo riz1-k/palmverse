@@ -74,6 +74,7 @@ function SolanaPay() {
             connection: connection,
             serialization: true,
           })
+          console.log(rawNfts)
           rawNfts.forEach(nft => {
             if (nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
               setNfts(e => [...e, nft]);
