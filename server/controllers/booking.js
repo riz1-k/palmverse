@@ -8,6 +8,8 @@ exports.newBooking = async (req, res) => {
   const { walletId, bookingInfo, transactionId, to, lamports } =
     req.body;
 
+  let lamFromVeri;
+
   let transactionExists = await Booking.findOne({
     transactionId,
   }).exec();
@@ -54,6 +56,7 @@ exports.newBooking = async (req, res) => {
       const response = await axios(config);
       let info = await response.data.result.transaction.message
         .instructions[0].parsed.info;
+      lamFromVeri = info.lamports;
       if (
         info.destination === to &&
         info.source === walletId &&
@@ -92,7 +95,11 @@ exports.newBooking = async (req, res) => {
           console.log('unverified');
           return res
             .status(400)
-            .json({ msg: 'Unverified transaction' });
+            .json({
+              msg: 'Unverified transaction',
+              send: lamports,
+              lamFromVeri: lamFromVeri,
+            });
         }
         const newBook = await Booking.create({
           ...bookingInfo,
