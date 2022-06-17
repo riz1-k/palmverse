@@ -8,7 +8,7 @@ exports.newBooking = async (req, res) => {
   const { walletId, bookingInfo, transactionId, to, lamports } =
     req.body;
 
-  let lamFromVeri;
+  console.log(transactionId);
   let info;
 
   let transactionExists = await Booking.findOne({
@@ -55,7 +55,7 @@ exports.newBooking = async (req, res) => {
 
     try {
       const response = await axios(config);
-      console.log('response', response);
+      console.log('response', response.data);
       info = await response.data.result.transaction.message
         .instructions[0].parsed.info;
       lamFromVeri = info.lamports;
@@ -66,8 +66,6 @@ exports.newBooking = async (req, res) => {
       ) {
         return true;
       } else {
-        console.log('infolamp', info.lamports);
-        console.log('getlamp', lamports);
         return false;
       }
     } catch (err) {
