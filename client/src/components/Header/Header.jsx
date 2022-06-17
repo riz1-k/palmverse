@@ -75,7 +75,8 @@ export default function Navbar(props) {
     useEffect(() => {
         if (connected && publicKey) {
 
-            axios.post(`${process.env.REACT_APP_URL}/api/auth"`, { walletId: publicKey.toString() }).then(res => {
+            axios.post(`${process.env.REACT_APP_URL}/api/auth`, { walletId: publicKey.toString() }).then(res => {
+                console.log(res.data.user.bookings)
                 res.data.user.bookings.forEach(x => {
                     const bookingDate = moment(x.dateOut).format('L')
                     const currentDate = new Date().toLocaleDateString();
@@ -109,7 +110,7 @@ export default function Navbar(props) {
             try {
                 if (connection && publicKey) {
 
-                    const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"))
+                    const connect = createConnectionConfig('https://ssc-dao.genesysgo.net/');
                     const rawNfts = await getParsedNftAccountsByOwner({
                         publicAddress: publicKey,
                         connection: connect,

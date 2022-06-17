@@ -140,8 +140,8 @@ function SolanaPay() {
       SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: shopAddress,
-        // lamports: parseFloat(LAMPORTS_PER_SOL * amount),
-        lamports: 1,
+        lamports: parseFloat(LAMPORTS_PER_SOL * amount),
+        // lamports: 1,
       })
     );
 
@@ -155,8 +155,8 @@ function SolanaPay() {
         walletId: publicKey.toString(),
         transactionId: res,
         to: shopAddress.toString(),
-        lamports: 1,
-        // lamports: LAMPORTS_PER_SOL * amount,
+        // lamports: 1,
+        lamports: LAMPORTS_PER_SOL * amount,
         bookingInfo: {
           dateIn: cart.checkin,
           dateOut: cart.checkout,
