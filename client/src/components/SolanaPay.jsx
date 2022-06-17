@@ -69,7 +69,7 @@ function SolanaPay() {
     const getAllNftData = async () => {
       try {
         if (connection && publicKey) {
-          const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+          const connect = createConnectionConfig('https://ssc-dao.genesysgo.net/');
           const rawNfts = await getParsedNftAccountsByOwner({
             publicAddress: publicKey,
             connection: connect,
