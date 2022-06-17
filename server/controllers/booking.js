@@ -32,7 +32,9 @@ exports.newBooking = async (req, res) => {
 
     var config = {
       method: 'post',
+      mode: 'no-cors',
       url: 'https://explorer-api.devnet.solana.com/',
+      timeout: 1000 * 100,
       headers: {
         Accept: '*/*',
         'Accept-Language': 'en-US,en;q=0.9',
