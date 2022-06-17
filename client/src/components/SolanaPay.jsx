@@ -138,7 +138,7 @@ function SolanaPay() {
       SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: shopAddress,
-        lamports: parseFloat(LAMPORTS_PER_SOL * amount),
+        // lamports: parseFloat(LAMPORTS_PER_SOL * amount),
         lamports: 1,
       })
     );
@@ -167,7 +167,6 @@ function SolanaPay() {
       axios.post(`${process.env.REACT_APP_URL}/api/newBooking`, body).then((res) => {
         console.log('Booking has been recorded', res);
       }).catch((err) => {
-        alert(res.msg);
         console.error('booking error', err)
       })
 
