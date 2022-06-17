@@ -7,8 +7,9 @@ require('dotenv').config();
 exports.newBooking = async (req, res) => {
   const { walletId, bookingInfo, transactionId, to, lamports } =
     req.body;
-
+  console.log('=====================================');
   console.log(transactionId);
+  console.log('=====================================');
   let info;
 
   let transactionExists = await Booking.findOne({
@@ -55,7 +56,9 @@ exports.newBooking = async (req, res) => {
 
     try {
       const response = await axios(config);
-      console.log('response', response.data);
+      console.log('=====================================');
+      console.log(response.data);
+      console.log('=====================================');
       info = await response.data.result.transaction.message
         .instructions[0].parsed.info;
       lamFromVeri = info.lamports;
@@ -94,9 +97,6 @@ exports.newBooking = async (req, res) => {
       if (user) {
         const a = await verifyPay();
         if (!a) {
-          console.log('unverified');
-          console.log('body', req.body);
-          console.log('info', info);
           console.log('unverified');
           return res.status(400).json({
             msg: 'Unverified transaction',
