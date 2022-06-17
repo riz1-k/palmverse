@@ -65,6 +65,8 @@ exports.newBooking = async (req, res) => {
       ) {
         return true;
       } else {
+        console.log('infolamp', info.lamports);
+        console.log('getlamp', lamports);
         return false;
       }
     } catch (err) {
@@ -93,6 +95,9 @@ exports.newBooking = async (req, res) => {
       if (user) {
         const a = await verifyPay();
         if (!a) {
+          console.log('unverified');
+          console.log('body', req.body);
+          console.log('info', info);
           console.log('unverified');
           return res.status(400).json({
             msg: 'Unverified transaction',
