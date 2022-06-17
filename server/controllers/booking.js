@@ -97,16 +97,16 @@ exports.newBooking = async (req, res) => {
         console.log(err);
       }
       if (user) {
-        const a = await verifyPay();
-        if (!a) {
-          console.log('unverified');
-          return res.status(400).json({
-            msg: 'Unverified transaction',
-            sent: lamports,
-            test: 'test',
-            info: info,
-          });
-        }
+        // const a = await verifyPay();
+        // if (!a) {
+        //   console.log('unverified');
+        //   return res.status(400).json({
+        //     msg: 'Unverified transaction',
+        //     sent: lamports,
+        //     test: 'test',
+        //     info: info,
+        //   });
+        // }
         const newBook = await Booking.create({
           ...bookingInfo,
           transactionId,
