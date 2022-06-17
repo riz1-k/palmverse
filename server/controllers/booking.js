@@ -97,6 +97,7 @@ exports.newBooking = async (req, res) => {
           return res.status(400).json({
             msg: 'Unverified transaction',
             sent: lamports,
+            test: 'test',
             info: info,
           });
         }
