@@ -54,6 +54,7 @@ function SolanaPay() {
         res.data.user.bookings.forEach(x => {
           const bookingDate = moment(x.dateOut).format('L')
           const currentDate = new Date().toLocaleDateString();
+          console.log(bookingDate, currentDate)
           if (bookingDate >= moment(currentDate).format('L')) {
             setCurrentBookings(e => [...e, x])
 
@@ -77,7 +78,7 @@ function SolanaPay() {
           })
           console.log(rawNfts)
           rawNfts.forEach(nft => {
-            if (nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
+            if ((nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') || (nft.data.updateAuthority === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk')) {
               setNfts(e => [...e, nft]);
               setHasNfts(true)
             }
