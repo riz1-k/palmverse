@@ -186,7 +186,7 @@ function SolanaPay() {
 
         };
 
-        fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd", requestOptions)
+        fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd", requestOptions)
             .then(response => response.json())
             .then(result => {
                 setSolanaRate(result.solana.usd);
