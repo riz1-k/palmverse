@@ -136,6 +136,17 @@ const RoomView: React.FC<TypeReservationStep> = (
             Solana Pay
           </Button>
           <Button
+            color="eth"
+            type="button"
+            onClick={() => {
+              window.location.href = '/';
+            }}
+            disabled={true}
+            // disabled={!formState.inputs.roomType.isTouched}
+          >
+            ETH Pay
+          </Button>
+          <Button
             type="button"
             onClick={() => {
               // if (!formState.isValid) return;
