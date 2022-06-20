@@ -81,7 +81,7 @@ function SolanaPay() {
             if ((nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') || (nft.data.updateAuthority === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk')) {
               setNfts(e => [...e, nft]);
               setHasNfts(true);
-              console.log('right nft', nft)
+              console.log(`nft with radu's ID `, nft)
             }
           })
           return nfts;
