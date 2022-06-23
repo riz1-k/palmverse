@@ -104,7 +104,7 @@ function SolanaPay() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!hasFunds) {
+        if (hasFunds) {
 
             await startPayment({
                 ether: "0.000001",
@@ -206,7 +206,7 @@ function SolanaPay() {
     return (
         <>
 
-            <ReceiptModal show={show} setShow={setShow} tID={tID} setClosed={setClosed} isEth="true" />
+            <ReceiptModal show={show} setShow={setShow} tID={tID} setClosed={setClosed} isEth={true} />
             <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
             <CurrentBookings currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
 
