@@ -206,7 +206,7 @@ function SolanaPay() {
     return (
         <>
 
-            <ReceiptModal show={show} setShow={setShow} tID={tID} setClosed={setClosed} />
+            <ReceiptModal show={show} setShow={setShow} tID={tID} setClosed={setClosed} isEth="true" />
             <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
             <CurrentBookings currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
 

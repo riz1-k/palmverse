@@ -1,5 +1,7 @@
 import { Modal, Table } from 'react-bootstrap'
 export default function ReceiptModal(props) {
+    console.log(props)
+
     return (<Modal show={props.show} onHide={() => {
         props.setShow(false);
         props.setClosed(true);
@@ -27,10 +29,20 @@ export default function ReceiptModal(props) {
             borderRadius: "4px",
             marginBottom: "16px"
         }} onClick={() => {
+            console.log(props)
             navigator.clipboard.writeText(props.tID);
             alert('Transaction ID copied to your clipboard');
         }}>Copy Transaction ID</button>
 
-        <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.Footer>
+        {
+            props.isEth ? (
+
+                <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://rinkeby.etherscan.io/tx/${props.tID}`} target='_blank'> here</a></p> </Modal.Footer>
+            ) : (
+
+                <Modal.F ooter style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.F>
+            )
+        }
+
     </Modal>);
 }
