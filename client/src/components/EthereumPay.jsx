@@ -210,7 +210,7 @@ function SolanaPay() {
             <PreviousBookings prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
             <CurrentBookings currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
 
-            <EthNav connect={connect} setPrevTransOpen={setPrevTransOpen} setCurrentTransOpen={setCurrentTransOpen} setNftOpen={setNftOpen}></EthNav>
+            <EthNav status={status} setPrevTransOpen={setPrevTransOpen} setCurrentTransOpen={setCurrentTransOpen} setNftOpen={setNftOpen}></EthNav>
             <div className="solcontainer">
                 <div className="body">
                     <div>

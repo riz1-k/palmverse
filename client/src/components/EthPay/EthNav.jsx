@@ -20,7 +20,7 @@ export default function Navbar(props) {
                 Pay via ETH
             </h1>
             <DropdownButton style={{
-                opacity: !props.connect && "0"
+                opacity: !props.status == "connected" && "0"
             }} title="Palmverse Wallet">
                 <Dropdown.Item onClick={() => props.setCurrentTransOpen(true)}>Current Bookings</Dropdown.Item>
                 <Dropdown.Item onClick={() => props.setPrevTransOpen(true)}>Previous Bookings</Dropdown.Item>
