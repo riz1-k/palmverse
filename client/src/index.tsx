@@ -6,7 +6,7 @@ import App from './containers/App';
 import MainRouter from 'MainRouter';
 import reportWebVitals from './reportWebVitals';
 import store from './stores';
-
+import './index.css';
 import './lib/styles/_reboot.css';
 import './lib/styles/main.scss';
 

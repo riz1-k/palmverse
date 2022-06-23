@@ -96,7 +96,7 @@ export default function PreviousBookings(props) {
                                         textAlign: "left"
                                     }}>{booking.price}<span style={{
                                         paddingLeft: "8px"
-                                    }}>SOL</span></td>
+                                    }}>{props.isEth ? `ETH` : `SOL`}</span></td>
                                     <td style={{
                                         padding: "0.5rem 1.2rem",
                                         width: "1.2rem",

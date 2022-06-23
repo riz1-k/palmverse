@@ -1,6 +1,5 @@
 import { Modal, Table } from 'react-bootstrap'
 export default function ReceiptModal(props) {
-    console.log(props)
 
     return (<Modal show={props.show} onHide={() => {
         props.setShow(false);
