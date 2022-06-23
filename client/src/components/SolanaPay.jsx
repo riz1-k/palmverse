@@ -219,7 +219,7 @@ function SolanaPay() {
         <div>
           <h5 style={{ display: "flex", justifyContent: "center" }}>
             <p style={{ marginRight: "4px" }}>Amount in USD:</p>
-            {nfts.length ? (
+            {nfts.length > 0 ? (
               <div className="d-flex">
                 <p
                   style={{ textDecoration: "line-through", marginRight: "8px" }}
@@ -244,7 +244,7 @@ function SolanaPay() {
             }}
           >
             <p style={{ marginRight: "4px" }}>Amount in Sol:</p>
-            {nfts.length ? (
+            {nfts.length > 0 ? (
               <div className="d-flex">
                 <p
                   style={{ textDecoration: "line-through", marginRight: "8px" }}

@@ -139,10 +139,9 @@ const RoomView: React.FC<TypeReservationStep> = (
             color="eth"
             type="button"
             onClick={() => {
-              window.location.href = '/';
+              window.location.href = '/ethpay';
             }}
-            disabled={true}
-            // disabled={!formState.inputs.roomType.isTouched}
+            disabled={!formState.inputs.roomType.isTouched}
           >
             ETH Pay
           </Button>
