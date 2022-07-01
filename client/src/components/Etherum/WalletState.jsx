@@ -11,10 +11,13 @@ const EthWalletProvider = ({ children }) => {
     const [ethPrice, setEthPrice] = useState(0);
 
 
-    ethWallet.on('accountsChanged', () => {
-        localStorage.removeItem('ethWalletAddress')
-        setWalletAddress();
-    })
+    if (ethWallet) {
+
+        ethWallet.on('accountsChanged', () => {
+            localStorage.removeItem('ethWalletAddress')
+            setWalletAddress();
+        })
+    }
 
     //Get current Ethereum price
     const getEthPrice = async () => {

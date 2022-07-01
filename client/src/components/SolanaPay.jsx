@@ -128,13 +128,16 @@ function SolanaPay() {
 
   const pay = async () => {
     let amount;
-    if (hasNfts) {
-      amount = (a.toFixed(3) - (a.toFixed(3) * .30))
+    if (!hasNfts) {
+      amount = a.toFixed(3) - (a.toFixed(3) * .30)
     } else {
-      amount = parseFloat(a.toFixed(3))
+      amount = (a.toFixed(3))
     }
-    console.log(amount)
+
+
+
     if (!publicKey) throw new WalletNotConnectedError();
+
     const transaction = new Transaction().add(
       SystemProgram.transfer({
         fromPubkey: publicKey,
