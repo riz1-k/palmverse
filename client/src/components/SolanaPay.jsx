@@ -16,8 +16,6 @@ import styleClasses from '../components/ReservationDetails/ReservationTotals/Res
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import './sol.css'
 import { getParsedNftAccountsByOwner, createConnectionConfig, } from "@nfteyez/sol-rayz"
-
-
 import CurrentBookings from './Solpay/Modals/CurrentBookings';
 import PreviousBookings from './Solpay/Modals/PreviousBookings';
 import ReceiptModal from './Solpay/Modals/ReceiptModal';
@@ -54,17 +52,17 @@ function SolanaPay() {
         res.data.user.bookings.forEach(x => {
           const bookingDate = moment(x.dateOut).format('L')
           const currentDate = new Date().toLocaleDateString();
-          console.log(bookingDate, currentDate)
-          if (bookingDate >= moment(currentDate).format('L')) {
-            setCurrentBookings(e => [...e, x])
 
+          if (new Date(bookingDate) > new Date(currentDate)) {
+            setCurrentBookings(e => [...e, x])
           } else {
-            setpreviousBookings([...previousBookings, x]);
+            setpreviousBookings(e => [...e, x]);
           }
         })
       }).catch(error => console.error('wallet login error', error));
     }
-  }, [connected])
+  }, [connected]);
+
 
   useEffect(() => {
     const getAllNftData = async () => {
@@ -141,8 +139,8 @@ function SolanaPay() {
       SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: shopAddress,
-        lamports: parseFloat(LAMPORTS_PER_SOL * amount),
-        // lamports: 1,
+        // lamports: parseFloat(LAMPORTS_PER_SOL * amount),
+        lamports: 1,
       })
     );
 

@@ -39,7 +39,7 @@ export default function ReceiptModal(props) {
                 <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://rinkeby.etherscan.io/tx/${props.tID}`} target='_blank'> here</a></p> </Modal.Footer>
             ) : (
 
-                <Modal.F ooter style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.F>
+                <Modal.Footer style={{ display: "flex", justifyContent: "center", alignItems: "center" }} ><p>You can view your transaction details <a href={`https://explorer.solana.com/tx/${props.tID}?cluster=devnet`} target='_blank'> here</a></p> </Modal.Footer>
             )
         }
 

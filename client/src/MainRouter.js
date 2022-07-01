@@ -13,9 +13,7 @@ import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
-
-import { MetaMaskProvider } from 'metamask-react';
-
+import { EthWalletProvider } from 'components/Etherum/WalletState';
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
 function MainRouter() {
@@ -33,9 +31,9 @@ function MainRouter() {
   );
 
   return (
-    <MetaMaskProvider>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect={true}>
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect={true}>
+        <EthWalletProvider>
           <BrowserRouter>
             <Routes>
               <Route element={<App />} index path="/" />
@@ -47,9 +45,9 @@ function MainRouter() {
               <Route element={<EthPay />} index path="/ethpay" />
             </Routes>
           </BrowserRouter>
-        </WalletProvider>
-      </ConnectionProvider>
-    </MetaMaskProvider>
+        </EthWalletProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   );
 }
 

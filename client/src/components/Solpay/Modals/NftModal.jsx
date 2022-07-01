@@ -26,9 +26,13 @@ export default function NftModal(props) {
                                 height: "140px",
                                 width: "140px"
                             }} />
-                            <Card.Title style={{
-                                textAlign: "center"
-                            }}>{props.nfts[index].data.name}</Card.Title>
+                            {
+                                !props.isEth && (
+                                    <Card.Title style={{
+                                        textAlign: "center"
+                                    }}>{props.nfts[index].data.name && props.nfts[index].data.name}</Card.Title>
+                                )
+                            }
                         </Card>
 
                     </div>;
