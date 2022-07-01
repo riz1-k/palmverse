@@ -128,10 +128,11 @@ function SolanaPay() {
 
   const pay = async () => {
     let amount;
-    if (!hasNfts) {
+
+    if (hasNfts) {
       amount = a.toFixed(3) - (a.toFixed(3) * .30)
     } else {
-      amount = (a.toFixed(3))
+      amount = a.toFixed(3)
     }
 
 
