@@ -76,7 +76,7 @@ function SolanaPay() {
           })
           console.log(rawNfts)
           rawNfts.forEach(nft => {
-            if ((nft.data.updateAuthority === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk')) {
+            if (nft.updateAuthority === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
               setNfts(e => [...e, nft]);
               setHasNfts(true)
             }
