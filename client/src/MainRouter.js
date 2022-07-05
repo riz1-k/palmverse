@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from 'containers/App';
 import SolanaPay from 'components/SolanaPay';
@@ -16,6 +16,7 @@ import {
 import { EthWalletProvider } from 'components/Etherum/WalletState';
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
+
 function MainRouter() {
   const network = WalletAdapterNetwork.Devnet;
 

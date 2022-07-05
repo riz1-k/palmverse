@@ -70,7 +70,7 @@ const RoomView: React.FC<TypeReservationStep> = (
           <>
             <span>
               {/* 1 {cart.days && +cart.days > 1 ? 'Days' : 'Day'} */}
-              1 Day
+              Room price / night
               <br />
               <p className="p-0 m-0">Total for selected period</p>
               <br />
