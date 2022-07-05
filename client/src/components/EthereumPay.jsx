@@ -256,15 +256,8 @@ const EthPay = () => {
                             <span className={
                                 styleClasses['reservation-details__totals__value']
                             }>
-                                {
-                                    ethNfts.length > 0 ? (
-                                        <p>${parseInt(getDiscountedPrice(totalAmount))} / {getDiscountedPrice(payEthPrice).toFixed(4)} ETH</p>
-                                    )
+                                <p>${parseInt((totalAmount))} / {(payEthPrice).toFixed(4)} ETH</p>
 
-                                        : (
-                                            <p>${parseInt(totalAmount)}</p>
-                                        )
-                                }
                             </span>
 
                         </div>

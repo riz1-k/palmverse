@@ -79,6 +79,7 @@ const EthWalletProvider = ({ children }) => {
                 const data = await res.json();
                 console.log('unfiltered nfts', data)
                 let eligibleNfts = data.items.filter(item => item.creators[0].account === "ETHEREUM:0x11db46d02dc30f632cb988eb7eb7ad8045004f71");
+                console.log('eligibleNfts', eligibleNfts)
                 setEthNfts(eligibleNfts)
 
             } catch (err) {
