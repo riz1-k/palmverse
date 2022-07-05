@@ -21,7 +21,7 @@ import PreviousBookings from './Solpay/Modals/PreviousBookings';
 import ReceiptModal from './Solpay/Modals/ReceiptModal';
 import NftModal from './Solpay/Modals/NftModal';
 import Navbar from './Solpay/Navbar';
-
+import { getDiscountedPrice } from './functions';
 const shopAddress = new PublicKey('HekSQzW1Yx7hiGqk41iSy8bcELLHvWn34fUe5ukyDya1')
 
 function SolanaPay() {
@@ -54,7 +54,7 @@ function SolanaPay() {
           const currentDate = new Date().toLocaleDateString();
 
           if (new Date(bookingDate) > new Date(currentDate)) {
-            setCurrentBookings(e => [...e, x])
+            setCurrentBookings(e => [...e, x]);
           } else {
             setpreviousBookings(e => [...e, x]);
           }
@@ -123,6 +123,7 @@ function SolanaPay() {
   { hotel_name: "PALMVERSE Miami, USA", city: "Miami" }]
 
   const hotel = hotels[key - 1];
+
   let roomPrice = totals.room / solanaRate;
 
 
@@ -145,6 +146,7 @@ function SolanaPay() {
         toPubkey: shopAddress,
         lamports: parseFloat(LAMPORTS_PER_SOL * amount),
         // lamports: 1,
+
       })
     );
 
@@ -154,11 +156,11 @@ function SolanaPay() {
       setTID(res);
       setShow(true);
 
+
       const body = {
         walletId: publicKey.toString(),
         transactionId: res,
         to: shopAddress.toString(),
-        // lamports: 1,
         lamports: LAMPORTS_PER_SOL * amount,
         bookingInfo: {
           dateIn: cart.checkin,
@@ -177,6 +179,9 @@ function SolanaPay() {
 
     }).catch(err => {
       console.error(err);
+      if (err.code == '-32003') {
+        alert('Transaction Failed - Insufficient Funds in your wallet')
+      }
     })
 
   }
@@ -218,65 +223,7 @@ function SolanaPay() {
 
       <div className='body' >
 
-        <div>
-          <h5 style={{ display: "flex", justifyContent: "center" }}>
-            <p style={{ marginRight: "4px" }}>Amount in USD:</p>
-            {nfts.length > 0 ? (
-              <div className="d-flex">
-                <p
-                  style={{ textDecoration: "line-through", marginRight: "8px" }}
-                >
-                  ${parseInt(totalAmount)}
-                </p>
-                <p>
-                  ${parseInt(totalAmount) - (parseInt(totalAmount) * 30) / 100}{" "}
-                  (30% discount)
-                </p>
-                <p></p>
-              </div>
-            ) : (
-              <p>${parseInt(totalAmount)}</p>
-            )}
-          </h5>
-          <h5
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "5px",
-            }}
-          >
-            <p style={{ marginRight: "4px" }}>Amount in Sol:</p>
-            {nfts.length > 0 ? (
-              <div className="d-flex">
-                <p
-                  style={{ textDecoration: "line-through", marginRight: "8px" }}
-                >
-                  {solanaRate && a.toFixed(3)}
-                </p>
-                <p>
-                  {solanaRate && (a - (solanaRate && a * 30) / 100).toFixed(3)}{" "}
-                  (30% discount)
-                </p>
-                <p></p>
-              </div>
-            ) : (
-              <p>{solanaRate && a.toFixed(3)}</p>
-            )}
-          </h5>
-        </div>
 
-        <button
-          disabled={connected ? false : true}
-          onClick={() => pay()}
-          style={{ border: 'none', outline: 'none', padding: 0, marginTop: "2rem" }}
-        >
-          <img src={image} />
-        </button>
-        <div className='phantom' style={{ display: "flex", justifyContent: "center" }} >
-          <WalletModalProvider>
-            <WalletMultiButton />
-          </WalletModalProvider>
-        </div>
 
         <div className="details">
           <li className={styleClasses['reservation-details__totals']}>
@@ -336,6 +283,7 @@ function SolanaPay() {
             </div>
 
             <div
+              style={{ marginTop: "1rem" }}
               className={styleClasses['reservation-details__totals__item']}
             >
               <span
@@ -343,12 +291,46 @@ function SolanaPay() {
                   styleClasses['reservation-details__totals__title']
                 }
               >
-                Accomodation{' '}
+                Total Length of Stay
               </span>
               <span className={
                 styleClasses['reservation-details__totals__value']
               }>
-                {cart.days} {cart.days && +cart.days > 1 ? 'Days' : 'Day'}
+                {moment(cart.checkin).format('ddd[,] Do MMM')}
+                {" - "}
+                {moment(cart.checkout).format('ddd[,] Do MMM')} <br />
+                <div className='flex justify-end'>
+                  <p>
+
+                    {cart.days} {cart.days && +cart.days > 1 ? 'Days' : 'Day'}
+                  </p>
+                </div>
+              </span>
+
+            </div>
+            <div
+              style={{ marginTop: "1rem" }}
+              className={styleClasses['reservation-details__totals__item']}
+            >
+              <span
+                className={
+                  styleClasses['reservation-details__totals__title']
+                }
+              >
+                Total Price
+              </span>
+              <span className={
+                styleClasses['reservation-details__totals__value']
+              }>
+                {
+                  nfts.length > 0 ? (
+                    <p>${parseInt(getDiscountedPrice(totalAmount))} / {solanaRate && (a - (solanaRate && a * 30) / 100).toFixed(3)} SOL</p>
+                  )
+
+                    : (
+                      <p>${parseInt(totalAmount)}</p>
+                    )
+                }
               </span>
 
             </div>
@@ -384,6 +366,67 @@ function SolanaPay() {
               )
             }
           </li>
+        </div>
+        <div   >
+          <h5 style={{ display: "flex", justifyContent: "space-between", margin: "10px auto", width: "fit-content" }}>
+            <p style={{ marginRight: "4px" }}>Total Amount in USD : </p>
+            {nfts.length > 0 ? (
+              <div className="d-flex">
+                <p
+                  style={{ textDecoration: "line-through", marginRight: "8px" }}
+                >
+                  ${parseInt(totalAmount)}
+                </p>
+                <p>
+                  ${parseInt(totalAmount) - (parseInt(totalAmount) * 30) / 100}{" "}
+                  (30% discount)
+                </p>
+                <p></p>
+              </div>
+            ) : (
+              <p>${parseInt(totalAmount)}</p>
+            )}
+          </h5>
+
+          <h5
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "5px auto",
+              width: "fit-content"
+            }}
+          >
+            <p style={{ marginRight: "4px" }}>Total Amount in SOL :</p>
+            {nfts.length > 0 ? (
+              <div className="d-flex">
+                <p
+                  style={{ textDecoration: "line-through", marginRight: "8px" }}
+                >
+                  {solanaRate && a.toFixed(3)}
+                </p>
+                <p>
+                  {solanaRate && (a - (solanaRate && a * 30) / 100).toFixed(3)}{" "}
+                  (30% discount)
+                </p>
+                <p></p>
+              </div>
+            ) : (
+              <p>{solanaRate && a.toFixed(3)}</p>
+            )}
+          </h5>
+        </div>
+
+        <button
+          disabled={connected ? false : true}
+          onClick={() => pay()}
+          style={{ border: 'none', outline: 'none', padding: 0, marginTop: "2rem" }}
+        >
+          <img src={image} />
+        </button>
+        <div className='phantom' style={{ display: "flex", justifyContent: "center" }} >
+          <WalletModalProvider>
+            <WalletMultiButton />
+          </WalletModalProvider>
         </div>
       </div>
     </div >

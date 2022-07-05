@@ -22,7 +22,7 @@ export default function Navbar(props) {
     const [currentBookings, setCurrentBookings] = useState([])
     const [hasNfts, setHasNfts] = useState(false)
     const [prevTransOpen, setPrevTransOpen] = useState(false);
-    const [currentTransOpen, setCurrentTransOpen] = useState(false);
+    const [currentTransOpen, setCurrentTransOpen] = useState(localStorage.getItem('justPayed') ? true : false);
     const [nftOpen, setNftOpen] = useState(false);
     const [nfts, setNfts] = useState([]);
     const [nftImages, setNftImages] = useState([]);

@@ -137,7 +137,7 @@ function SolanaPay() {
 
         } catch (err) {
             console.error(err)
-            alert(err.message)
+            return alert(err.message)
         }
 
     }

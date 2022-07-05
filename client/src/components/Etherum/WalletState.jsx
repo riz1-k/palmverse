@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from 'react';
-
+import { ethers } from 'ethers';
 const EthWalletContext = createContext();
 
 const ethWallet = window.ethereum;
@@ -9,7 +9,18 @@ const EthWalletProvider = ({ children }) => {
     const [walletAddress, setWalletAddress] = useState('');
     const [ethNfts, setEthNfts] = useState([]);
     const [ethPrice, setEthPrice] = useState(0);
+    const [walletBalance, setWalletBalance] = useState(0);
 
+    useEffect(() => {
+        if (walletAddress) {
+            window.ethereum.request({
+                method: 'eth_getBalance',
+                params: [walletAddress, 'latest']
+            }).then(balance => {
+                setWalletBalance(ethers.utils.formatEther(balance))
+            })
+        }
+    }, [walletAddress])
 
     if (ethWallet) {
 
@@ -54,7 +65,6 @@ const EthWalletProvider = ({ children }) => {
             }
         } catch (err) {
             console.error(err);
-            return alert(err.message);
         }
     }
 
@@ -80,7 +90,7 @@ const EthWalletProvider = ({ children }) => {
     }, [walletAddress]);
 
     return (
-        <EthWalletContext.Provider value={{ walletAddress, ethNfts, ethPrice, connectWallet }}>
+        <EthWalletContext.Provider value={{ walletAddress, ethNfts, ethPrice, connectWallet, walletBalance }}>
             {children}
         </EthWalletContext.Provider>
     )

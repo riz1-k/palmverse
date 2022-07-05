@@ -23,12 +23,28 @@ const EthPay = () => {
     const [currentBookings, setCurrentBookings] = useState([]);
     const [nftImages, setNftImages] = useState([]);
     const [nftOpen, setNftOpen] = useState(false);
+    const [hasFunds, setHasFunds] = useState(false);
+    const { walletAddress, ethNfts, ethPrice, connectWallet, walletBalance } = useContext(EthWalletContext);
+    const [payEthPrice, setEthPrice] = useState(0);
 
-    const { walletAddress, ethNfts, ethPrice, connectWallet } = useContext(EthWalletContext);
+    useEffect(() => {
+        let amount = 0;
+        if (ethNfts.length > 0) {
+            amount = getDiscountedPrice(payEthPrice)
+        } else {
+            amount = payEthPrice;
+        }
+        if (walletBalance <= amount) {
+            setHasFunds(false);
+        } else {
+            setHasFunds(true);
+        }
+    }, [walletAddress, walletBalance, ethNfts])
+
+
 
     useEffect(() => {
         if (walletAddress) {
-
             axios.post(`${process.env.REACT_APP_URL}/api/auth`, { walletId: walletAddress }).then(res => {
                 res.data.user.bookings.forEach(x => {
                     const bookingDate = moment(x.dateOut).format('L')
@@ -62,7 +78,6 @@ const EthPay = () => {
         }
     }, [walletAddress])
 
-    const [payEthPrice, setEthPrice] = useState(0);
 
     const { totals, cart } = useCart();
 
@@ -75,13 +90,16 @@ const EthPay = () => {
     }, [ethPrice]);
 
     const handleSubmit = async () => {
-        console.log(walletAddress)
         if (!walletAddress) {
             alert("Please connect to your Metamask wallet")
             connectWallet()
         }
-        // let price = "0.000001"
-        let price = ethNfts.length > 0 ? getDiscountedPrice(payEthPrice).toString() : payEthPrice.toString();
+
+        if (hasFunds) {
+            return alert('Transaction Failed - Insufficient Funds in your wallet')
+        }
+        let price = "0.000001"
+        // let price = ethNfts.length > 0 ? getDiscountedPrice(payEthPrice).toString() : payEthPrice.toString();
         let ether = utils.parseUnits(price, 18);
         const provider = new providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -120,6 +138,8 @@ const EthPay = () => {
 
     }
 
+    const lowBalance = () => alert('Transaction Failed - Insufficient Funds in your wallet');
+
     return (
         <>
 
@@ -129,70 +149,7 @@ const EthPay = () => {
             <NftModal isEth={true} nfts={ethNfts} nftImages={nftImages} nftOpen={nftOpen} setNftOpen={setNftOpen}></NftModal>
             <EthNav walletAddress={walletAddress} connect={connectWallet} setPrevTransOpen={setPrevTransOpen} setCurrentTransOpen={setCurrentTransOpen} setNftOpen={setNftOpen}></EthNav>
             <div className="body">
-                <div>
-                    <h5 style={{ display: 'flex', justifyContent: 'center' }}>
-                        <p style={{ marginRight: '4px' }}>Amount in USD:</p>
-                        {ethNfts.length > 0 ? (
-                            <div className="d-flex">
-                                <p
-                                    style={{
-                                        textDecoration: 'line-through',
-                                        marginRight: '8px',
-                                    }}
-                                >
-                                    ${totalAmount}
-                                </p>
-                                <p>
-                                    $
-                                    {getDiscountedPrice(totalAmount)}
-                                    (30% discount)
-                                </p>
-                                <p></p>
-                            </div>
-                        ) : (
-                            <p>${totalAmount}</p>
-                        )}
-                    </h5>
-                    <h5
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            marginTop: '5px',
-                        }}
-                    >
-                        <p style={{ marginRight: '4px' }}>Amount in ETH:</p>
-                        {ethNfts.length > 0 ? (
-                            <div className="d-flex">
-                                <p
-                                    style={{
-                                        textDecoration: 'line-through',
-                                        marginRight: '8px',
-                                    }}
-                                >
-                                    {payEthPrice.toFixed(4)}
-                                </p>
-                                <p>{getDiscountedPrice(payEthPrice).toFixed(4)} (30% discount)
-                                </p>
-                                <p></p>
-                            </div>
-                        ) : (
-                            <p>{payEthPrice.toFixed(4)}</p>
-                        )}
-                    </h5>
-                </div>
 
-                <button
-                    disabled={walletAddress ? false : connectWallet()}
-                    onClick={() => handleSubmit()}
-                    style={{
-                        border: 'none',
-                        outline: 'none',
-                        padding: 0,
-                        marginTop: '2rem',
-                    }}
-                >
-                    <img src={image} />
-                </button>
 
                 <div className="details">
                     <li
@@ -260,25 +217,56 @@ const EthPay = () => {
                         </div>
 
                         <div
-                            className={
-                                styleClasses['reservation-details__totals__item']
-                            }
+                            style={{ marginTop: "1rem" }}
+                            className={styleClasses['reservation-details__totals__item']}
                         >
                             <span
                                 className={
                                     styleClasses['reservation-details__totals__title']
                                 }
                             >
-                                Accomodation{' '}
+                                Total Length of Stay
                             </span>
+                            <span className={
+                                styleClasses['reservation-details__totals__value']
+                            }>
+                                {moment(cart.checkin).format('ddd[,] Do MMM')}
+                                {" - "}
+                                {moment(cart.checkout).format('ddd[,] Do MMM')} <br />
+                                <div className='flex justify-end'>
+                                    <p>
+
+                                        {cart.days} {cart.days && +cart.days > 1 ? 'Days' : 'Day'}
+                                    </p>
+                                </div>
+                            </span>
+
+                        </div>
+                        <div
+                            style={{ marginTop: "1rem" }}
+                            className={styleClasses['reservation-details__totals__item']}
+                        >
                             <span
                                 className={
-                                    styleClasses['reservation-details__totals__value']
+                                    styleClasses['reservation-details__totals__title']
                                 }
                             >
-                                {cart.days}{' '}
-                                {cart.days && +cart.days > 1 ? 'Days' : 'Day'}
+                                Total Price
                             </span>
+                            <span className={
+                                styleClasses['reservation-details__totals__value']
+                            }>
+                                {
+                                    ethNfts.length > 0 ? (
+                                        <p>${parseInt(getDiscountedPrice(totalAmount))} / {getDiscountedPrice(payEthPrice).toFixed(4)} ETH</p>
+                                    )
+
+                                        : (
+                                            <p>${parseInt(totalAmount)}</p>
+                                        )
+                                }
+                            </span>
+
                         </div>
                         {ethNfts.length > 0 ? (
                             <div
@@ -306,22 +294,12 @@ const EthPay = () => {
                             </div>
                         ) : (
                             <div
-                                style={{
-                                    textAlign: 'center',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    padding: '2rem',
-                                    fontSize: '20px',
-                                }}
-                                className={
-                                    styleClasses['reservation-details__totals__item']
-                                }
+                                style={{ textAlign: 'center', display: "flex", justifyContent: "center", padding: "2rem", fontSize: "20px" }}
+                                className={styleClasses['reservation-details__totals__item']}
                             >
                                 <span
                                     className={
-                                        styleClasses[
-                                        'reservation-details__totals__title'
-                                        ]
+                                        styleClasses['reservation-details__totals__title']
                                     }
                                 >
                                     No Palmverse NFTs have been found in your wallet
@@ -330,6 +308,70 @@ const EthPay = () => {
                         )}
                     </li>
                 </div>
+                <div>
+                    <h5 style={{ display: 'flex', justifyContent: 'space-between', margin: "10px auto", width: "fit-content" }}>
+                        <p style={{ marginRight: '4px' }} > Total Amount in USD:</p>
+                        {ethNfts.length > 0 ? (
+                            <div className="d-flex">
+                                <p
+                                    style={{
+                                        textDecoration: 'line-through',
+                                        marginRight: '8px',
+                                    }}
+                                >
+                                    ${totalAmount}
+                                </p>
+                                <p>
+                                    $
+                                    {getDiscountedPrice(totalAmount)}
+                                    (30% discount)
+                                </p>
+                                <p></p>
+                            </div>
+                        ) : (
+                            <p>${totalAmount}</p>
+                        )}
+                    </h5>
+                    <h5
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            marginTop: '5px',
+                        }}
+                    >
+                        <p style={{ marginRight: '4px' }}> Total Amount in ETH:</p>
+                        {ethNfts.length > 0 ? (
+                            <div className="d-flex">
+                                <p
+                                    style={{
+                                        textDecoration: 'line-through',
+                                        marginRight: '8px',
+                                    }}
+                                >
+                                    {payEthPrice.toFixed(4)}
+                                </p>
+                                <p>{getDiscountedPrice(payEthPrice).toFixed(4)} (30% discount)
+                                </p>
+                                <p></p>
+                            </div>
+                        ) : (
+                            <p>{payEthPrice.toFixed(4)}</p>
+                        )}
+                    </h5>
+                </div>
+
+                <button
+                    disabled={walletAddress ? false : connectWallet()}
+                    onClick={() => handleSubmit()}
+                    style={{
+                        border: 'none',
+                        outline: 'none',
+                        padding: 0,
+                        marginTop: '2rem',
+                    }}
+                >
+                    <img src={image} />
+                </button>
             </div>
         </>
     )

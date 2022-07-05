@@ -17,7 +17,7 @@
 
 .body{
     margin-top: 3rem !important;
-    width: 600px;
+    width: fit-content;
     margin: auto;
     padding: 5rem;
     box-shadow: 0 0 14px #8888;

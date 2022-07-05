@@ -50,6 +50,10 @@ const RoomView: React.FC<TypeReservationStep> = (
   const { cart } = useCart();
   const { selectedHotel } = useHotels();
 
+  const totalPrice = (price: number) => {
+    return price * Number(cart.days);
+  };
+
   const roomTypeOptions: TypeRoomOptions[] = [];
   if (selectedHotel?.details?.room_type.length) {
     selectedHotel.details.room_type.map((type, index) => {
@@ -64,10 +68,15 @@ const RoomView: React.FC<TypeReservationStep> = (
               {cart.days}{' '}
               {cart.days && +cart.days > 1 ? 'Days' : 'Day'}
               <br />
+              <p className="p-0 m-0">Total for selected period</p>
+              <br />
               {cart.adults}{' '}
               {cart.adults && +cart.adults > 1 ? 'Adults' : 'Adult'}
             </span>
-            <span>{hotelPrices[index]}$</span>
+            <span>
+              ${hotelPrices[index]}
+              <br /> ${totalPrice(hotelPrices[index])}
+            </span>
           </>
         ),
         imgUrl: type.photo,
@@ -80,7 +89,13 @@ const RoomView: React.FC<TypeReservationStep> = (
       <form onSubmit={(e) => e.preventDefault()}>
         <div className={formClasses['form__wide-row']}>
           <ReservationDetails
-            show={['checkin', 'checkout', 'adults', 'children']}
+            show={[
+              'checkin',
+              'days',
+              'checkout',
+              'adults',
+              'children',
+            ]}
           />
         </div>
         <h4

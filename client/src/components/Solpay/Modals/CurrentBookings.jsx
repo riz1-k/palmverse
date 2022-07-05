@@ -2,6 +2,11 @@ import { Modal, Table } from 'react-bootstrap'
 import styleClasses from '../../ReservationDetails/ReservationTotals/ReservationTotals.module.scss'
 import moment from 'moment';
 export default function CurrentBookings(props) {
+
+    if (localStorage.getItem('justPayed')) {
+        localStorage.removeItem('justPayed');
+    }
+
     return (<Modal show={props.currentTransOpen} onHide={() => {
         props.setCurrentTransOpen(false);
     }} size='lg'  >
