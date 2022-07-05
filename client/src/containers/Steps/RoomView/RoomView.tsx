@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { EthWalletContext } from 'components/Etherum/WalletState';
 import validatorjs from 'validator';
 
 import { useForm, useLocalStorage, useCart, useHotels } from 'hooks';
@@ -54,6 +55,9 @@ const RoomView: React.FC<TypeReservationStep> = (
     return price * Number(cart.days);
   };
 
+  const hasNfts = localStorage.getItem('hasSolNfts');
+  const { ethNfts } = useContext(EthWalletContext);
+  console.log(ethNfts);
   const roomTypeOptions: TypeRoomOptions[] = [];
   if (selectedHotel?.details?.room_type.length) {
     selectedHotel.details.room_type.map((type, index) => {
@@ -72,11 +76,20 @@ const RoomView: React.FC<TypeReservationStep> = (
               <br />
               {cart.adults}{' '}
               {cart.adults && +cart.adults > 1 ? 'Adults' : 'Adult'}
+              <br />
+              <span className="text-center ">
+                <p className="py-6">
+                  {hasNfts == 'true' || ethNfts.length > 0
+                    ? 'Palmverse NFTs have been found in your wallet'
+                    : 'No Palmverse NFTs have been found in your wallet'}
+                </p>
+              </span>
             </span>
             <span>
               ${hotelPrices[index]}
               <br /> ${totalPrice(hotelPrices[index])}
             </span>
+            <br />
           </>
         ),
         imgUrl: type.photo,

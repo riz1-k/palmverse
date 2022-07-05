@@ -42,7 +42,15 @@ export default function Navbar(props) {
             });
             setNftImages(ethImages);
         }
-    }, [ethNfts])
+    }, [ethNfts]);
+
+    useEffect(() => {
+        if (connected && publicKey) {
+            localStorage.setItem('hasSolNfts', true);
+        } else {
+            localStorage.removeItem('hasSolNfts');
+        }
+    }, [connected, publicKey])
 
     useEffect(() => {
         if (nfts && connected && publicKey) {
@@ -106,7 +114,6 @@ export default function Navbar(props) {
                             connection: connect,
                             serialization: true,
                         })
-                        console.log(rawNfts)
                         rawNfts.forEach(nft => {
                             if (nft.data.creators[0].address === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
                                 setNfts(e => [...e, nft]);
