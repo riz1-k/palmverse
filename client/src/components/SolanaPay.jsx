@@ -323,13 +323,8 @@ function SolanaPay() {
                 styleClasses['reservation-details__totals__value']
               }>
                 {
-                  nfts.length > 0 ? (
-                    <p>${parseInt(getDiscountedPrice(totalAmount))} / {solanaRate && (a - (solanaRate && a * 30) / 100).toFixed(3)} SOL</p>
-                  )
 
-                    : (
-                      <p>${parseInt(totalAmount)}</p>
-                    )
+                  <p>${parseInt(totalAmount)} / {solanaRate && a.toFixed(3)} SOL</p>
                 }
               </span>
 

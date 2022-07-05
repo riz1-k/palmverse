@@ -77,12 +77,12 @@ const EthWalletProvider = ({ children }) => {
             try {
                 const res = await fetch(`https://api.rarible.org/v0.1/items/byOwner/?owner=ETHEREUM:${walletAddress}`);
                 const data = await res.json();
+                console.log('unfiltered nfts', data)
                 let eligibleNfts = data.items.filter(item => item.creators[0].account === "ETHEREUM:0x11db46d02dc30f632cb988eb7eb7ad8045004f71");
                 setEthNfts(eligibleNfts)
 
             } catch (err) {
                 console.error(err);
-                return alert("Something went wrong while connecting to your wallet. Please try again.");
             }
         }
         getNfts();
