@@ -205,7 +205,7 @@ const EthPay = () => {
                                     styleClasses['reservation-details__totals__title']
                                 }
                             >
-                                Room price
+                                Room price / night
                             </span>
                             <span
                                 className={

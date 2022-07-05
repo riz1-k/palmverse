@@ -144,7 +144,7 @@ function SolanaPay() {
       SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: shopAddress,
-        lamports: parseFloat(LAMPORTS_PER_SOL * amount),
+        lamports: parseInt(LAMPORTS_PER_SOL * amount),
         // lamports: 1,
 
       })
@@ -271,7 +271,7 @@ function SolanaPay() {
                   styleClasses['reservation-details__totals__title']
                 }
               >
-                Room price
+                Room price / night
               </span>
               <span
                 className={

@@ -69,21 +69,13 @@ const RoomView: React.FC<TypeReservationStep> = (
         meta: (
           <>
             <span>
-              {cart.days}{' '}
-              {cart.days && +cart.days > 1 ? 'Days' : 'Day'}
+              {/* 1 {cart.days && +cart.days > 1 ? 'Days' : 'Day'} */}
+              1 Day
               <br />
               <p className="p-0 m-0">Total for selected period</p>
               <br />
               {cart.adults}{' '}
               {cart.adults && +cart.adults > 1 ? 'Adults' : 'Adult'}
-              <br />
-              <span className="text-center ">
-                <p className="py-6">
-                  {hasNfts == 'true' || ethNfts.length > 0
-                    ? 'Palmverse NFTs have been found in your wallet'
-                    : 'No Palmverse NFTs have been found in your wallet'}
-                </p>
-              </span>
             </span>
             <span>
               ${hotelPrices[index]}
