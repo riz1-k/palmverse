@@ -95,7 +95,7 @@ const EthPay = () => {
             connectWallet()
         }
 
-        if (hasFunds) {
+        if (!hasFunds) {
             return alert('Transaction Failed - Insufficient Funds in your wallet')
         }
 
