@@ -98,6 +98,7 @@ const EthPay = () => {
         if (hasFunds) {
             return alert('Transaction Failed - Insufficient Funds in your wallet')
         }
+
         let price = "0.000001"
         // let price = ethNfts.length > 0 ? getDiscountedPrice(payEthPrice).toString() : payEthPrice.toString();
         let ether = utils.parseUnits(price, 18);
