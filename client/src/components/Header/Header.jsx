@@ -27,6 +27,7 @@ export default function Navbar(props) {
     const [nfts, setNfts] = useState([]);
     const [nftImages, setNftImages] = useState([]);
     const { connection } = useConnection();
+    const [currLoading, setCurrLoading] = useState(true);
 
     const { publicKey, connected, disconnect } = useWallet();
 
@@ -71,6 +72,7 @@ export default function Navbar(props) {
         setNftImages([]);
         setNfts([])
         if ((connected && publicKey) || walletAddress) {
+            setCurrLoading(true);
             axios.post(`${process.env.REACT_APP_URL}/api/auth`, { walletId: publicKey ? publicKey.toString() : walletAddress }).then(res => {
                 res.data.user.bookings.forEach(x => {
                     const bookingDate = moment(x.dateOut).format('L')
@@ -82,6 +84,7 @@ export default function Navbar(props) {
                         setpreviousBookings(e => [...e, x]);
                     }
                 })
+                setCurrLoading(false);
             }).catch(error => console.error('wallet login error', error));
         }
     }, [connected, walletAddress])
@@ -230,7 +233,7 @@ export default function Navbar(props) {
 
         {/* </div>   */}
         <PreviousBookings isEth={walletAddress ? true : false} prevTransOpen={prevTransOpen} setPrevTransOpen={setPrevTransOpen} previousBookings={previousBookings}></PreviousBookings>
-        <CurrentBookings isEth={walletAddress ? true : false} currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
+        <CurrentBookings currLoading={currLoading} isEth={walletAddress ? true : false} currentTransOpen={currentTransOpen} setCurrentTransOpen={setCurrentTransOpen} currentBookings={currentBookings}></CurrentBookings>
         <NftModal isEth={walletAddress ? true : false} nfts={nfts} nftImages={nftImages} nftOpen={nftOpen} setNftOpen={setNftOpen}></NftModal>
     </>);
 }
