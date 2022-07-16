@@ -14,7 +14,6 @@ import {
   Geography,
   Marker,
 } from 'react-simple-maps';
-import { GrLocation } from 'react-icons/gr';
 
 let afterTwoDays: string | Date = new Date();
 afterTwoDays.setDate(afterTwoDays.getDate() + 1);
