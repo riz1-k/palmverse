@@ -26,20 +26,31 @@ const EthPay = () => {
     const [hasFunds, setHasFunds] = useState(false);
     const { walletAddress, ethNfts, ethPrice, connectWallet, walletBalance } = useContext(EthWalletContext);
     const [payEthPrice, setEthPrice] = useState(0);
+    const [amount, setAmount] = useState(0);
 
     useEffect(() => {
-        let amount = 0;
-        if (ethNfts.length > 0) {
-            amount = getDiscountedPrice(payEthPrice)
-        } else {
-            amount = payEthPrice;
+
+        if (ethNfts.length === 1) {
+            setAmount(getDiscountedPrice(payEthPrice, 15));
         }
+        else if (ethNfts.length === 2) {
+            setAmount(getDiscountedPrice(payEthPrice, 30));
+        }
+        else if (ethNfts.length >= 3) {
+            setAmount(getDiscountedPrice(payEthPrice, 40));
+        }
+        else if (ethNfts.length === 0) {
+            setAmount(payEthPrice);
+        }
+    }, [walletAddress, walletBalance, ethNfts]);
+
+    useEffect(() => {
         if (walletBalance <= amount) {
             setHasFunds(false);
         } else {
             setHasFunds(true);
         }
-    }, [walletAddress, walletBalance, ethNfts])
+    }, [amount])
 
 
 
@@ -99,7 +110,7 @@ const EthPay = () => {
             return alert('Transaction Failed - Insufficient Funds in your wallet')
         }
         // let price = "0.000001"
-        let price = ethNfts.length > 0 ? getDiscountedPrice(payEthPrice).toString() : payEthPrice.toString();
+        let price = ethNfts.length > 0 ? amount.toString() : payEthPrice.toString();
         let ether = utils.parseUnits(price, 18);
         const provider = new providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -316,8 +327,19 @@ const EthPay = () => {
                                 </p>
                                 <p>
                                     $
-                                    {getDiscountedPrice(totalAmount)}
-                                    (30% discount)
+                                    {
+                                        ethNfts.length === 1 ? (
+
+                                            getDiscountedPrice(totalAmount, 15)
+                                        ) : ethNfts.length === 2 ? (
+
+                                            getDiscountedPrice(totalAmount, 30)
+                                        ) : ethNfts.length >= 3 && (
+                                            getDiscountedPrice(totalAmount, 40)
+
+                                        )
+                                    }
+                                    {ethNfts.length === 1 ? "(15% discount)" : ethNfts.length === 2 ? "(30% discount)" : ethNfts.length >= 3 && "(40% discount)"}
                                 </p>
                                 <p></p>
                             </div>
@@ -343,8 +365,20 @@ const EthPay = () => {
                                 >
                                     {payEthPrice.toFixed(4)}
                                 </p>
-                                <p>{getDiscountedPrice(payEthPrice).toFixed(4)} (30% discount)
-                                </p>
+                                $
+                                {
+                                    ethNfts.length === 1 ? (
+
+                                        getDiscountedPrice(payEthPrice, 15).toFixed(3)
+                                    ) : ethNfts.length === 2 ? (
+
+                                        getDiscountedPrice(payEthPrice, 30).toFixed(3)
+                                    ) : ethNfts.length >= 3 && (
+                                        getDiscountedPrice(payEthPrice, 40).toFixed(3)
+
+                                    )
+                                }
+                                {ethNfts.length === 1 ? "(15% discount)" : ethNfts.length === 2 ? "(30% discount)" : ethNfts.length >= 3 && "(40% discount)"}
                                 <p></p>
                             </div>
                         ) : (

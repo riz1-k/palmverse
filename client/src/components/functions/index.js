@@ -1,3 +1,3 @@
-export const getDiscountedPrice = (price) => {
-  return price - (price * 30) / 100;
+export const getDiscountedPrice = (price, discount) => {
+  return price - (price * discount) / 100;
 };

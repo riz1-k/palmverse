@@ -21,7 +21,6 @@ import PreviousBookings from './Solpay/Modals/PreviousBookings';
 import ReceiptModal from './Solpay/Modals/ReceiptModal';
 import NftModal from './Solpay/Modals/NftModal';
 import Navbar from './Solpay/Navbar';
-import { getDiscountedPrice } from './functions';
 const shopAddress = new PublicKey('HekSQzW1Yx7hiGqk41iSy8bcELLHvWn34fUe5ukyDya1')
 
 function SolanaPay() {
@@ -42,7 +41,9 @@ function SolanaPay() {
   const [currentBookings, setCurrentBookings] = useState([])
   const [nftImages, setNftImages] = useState([]);
   const [nftOpen, setNftOpen] = useState(false);
-  const [hasNfts, setHasNfts] = useState(false)
+  const [hasNfts, setHasNfts] = useState(false);
+  const [amountInSol, setAmountInSol] = useState(0);
+  const [amountInUsd, setAmountInUsd] = useState(0);
   let id;
 
   useEffect(() => {
@@ -74,9 +75,9 @@ function SolanaPay() {
             connection: connect,
             serialization: true,
           })
-          console.log(rawNfts)
           rawNfts.forEach(nft => {
             if (nft.updateAuthority === 'TeEpKTJzN3yv5sabr3Bx5xNX4u7NkaPCwrWU41wSbJk') {
+
               setNfts(e => [...e, nft]);
               setHasNfts(true)
             }
@@ -89,6 +90,8 @@ function SolanaPay() {
     }
     getAllNftData()
   }, [connection, publicKey])
+
+  useEffect(() => console.log(nfts), [nfts])
 
   useEffect(() => {
     if (publicKey && connected) {
@@ -127,15 +130,28 @@ function SolanaPay() {
   let roomPrice = totals.room / solanaRate;
 
 
-  const pay = async () => {
-    let amount;
 
-    if (hasNfts) {
-      amount = a.toFixed(3) - (a.toFixed(3) * .30)
-    } else {
-      amount = a.toFixed(3)
+  useEffect(() => {
+    if (a && totalAmount && solanaRate) {
+
+      console.log(nfts)
+      if (nfts.length === 1) {
+        setAmountInSol(a.toFixed(3) - (a.toFixed(3) * .15).toFixed(2))
+        setAmountInUsd(parseInt(totalAmount).toFixed(3) - (parseInt(totalAmount).toFixed(3) * .15).toFixed(2))
+      } else if (nfts.length === 2) {
+        setAmountInSol(a.toFixed(3) - (a.toFixed(3) * .30).toFixed(2))
+        setAmountInUsd(parseInt(totalAmount).toFixed(3) - (parseInt(totalAmount).toFixed(3) * .30).toFixed(2))
+      } else if (nfts.length >= 3) {
+        setAmountInSol(a.toFixed(3) - (a.toFixed(3) * .40).toFixed(2))
+        setAmountInUsd(parseInt(totalAmount).toFixed(3) - (parseInt(totalAmount).toFixed(3) * .40).toFixed(2))
+      } else if (nfts.length === 0) {
+        setAmountInSol(a.toFixed(3))
+        setAmountInUsd(parseInt(totalAmount));
+      }
     }
+  }, [solanaRate, totalAmount, a, nfts])
 
+  const pay = async () => {
 
 
     if (!publicKey) throw new WalletNotConnectedError();
@@ -144,7 +160,7 @@ function SolanaPay() {
       SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: shopAddress,
-        lamports: parseInt(LAMPORTS_PER_SOL * amount),
+        lamports: parseInt(LAMPORTS_PER_SOL * amountInSol),
         // lamports: 1,
 
       })
@@ -161,13 +177,13 @@ function SolanaPay() {
         walletId: publicKey.toString(),
         transactionId: res,
         to: shopAddress.toString(),
-        lamports: LAMPORTS_PER_SOL * amount,
+        lamports: LAMPORTS_PER_SOL * amountInSol,
         bookingInfo: {
           dateIn: cart.checkin,
           dateOut: cart.checkout,
           hotelName: hotel.hotel_name,
           hotelCity: hotel.city,
-          price: amount,
+          price: amountInSol,
         },
       }
 
@@ -373,8 +389,9 @@ function SolanaPay() {
                   ${parseInt(totalAmount)}
                 </p>
                 <p>
-                  ${parseInt(totalAmount) - (parseInt(totalAmount) * 30) / 100}{" "}
-                  (30% discount)
+                  ${amountInUsd} {
+                    nfts.length === 1 ? "(15% discount)" : nfts.length === 2 ? "(30% discount)" : nfts.length >= 3 && "(40% discount)"
+                  }
                 </p>
                 <p></p>
               </div>
@@ -400,8 +417,8 @@ function SolanaPay() {
                   {solanaRate && a.toFixed(3)}
                 </p>
                 <p>
-                  {solanaRate && (a - (solanaRate && a * 30) / 100).toFixed(3)}{" "}
-                  (30% discount)
+                  {amountInSol}
+                  {nfts.length === 1 ? "(15% discount)" : nfts.length === 2 ? "(30% discount)" : nfts.length >= 3 && "(40% discount)"}
                 </p>
                 <p></p>
               </div>

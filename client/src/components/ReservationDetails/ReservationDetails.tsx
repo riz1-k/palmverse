@@ -107,6 +107,8 @@ const ReservationDetails: React.FC<TypeReservationDetailsProps> = (
     { hotel_name: 'PALMVERSE Miami, USA', city: 'Miami' },
   ];
   const hotelId: string = selectedHotel?.details?.id!;
+
+  console.log(selectedHotel);
   return (
     <div className={elClasses.join(' ')}>
       <h2 className={styleClasses['reservation-details__title']}>

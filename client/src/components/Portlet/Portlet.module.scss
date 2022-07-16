@@ -2,19 +2,19 @@
 @import '../../lib/styles/abstracts/_mixins.scss';
 
 .portlet {
-    box-shadow: $portlet-shadow;
-    border-radius: $border-radius;
-    $inner-padding: 26px;
-    background-color: #fff;
-    padding: calc(#{$inner-padding} * 1.1) $inner-padding;
+  box-shadow: $portlet-shadow;
+  border-radius: $border-radius;
+  $inner-padding: 26px;
+  background-color: #fff;
+  padding: calc(#{$inner-padding} * 1.2) $inner-padding;
 
-    // Space between portlets
-    &:not(:first-child) {
-        margin-top: 2rem;
-    }
+  // Space between portlets
+  &:not(:first-child) {
+    margin-top: 2rem;
+  }
 
-    // Space between direct elements inside a portlet
-    & > *:not(:last-child) {
-        margin-bottom: 22px;
-    }
+  // Space between direct elements inside a portlet
+  & > *:not(:last-child) {
+    margin-bottom: 22px;
+  }
 }
