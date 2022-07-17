@@ -110,7 +110,7 @@ const HotelDate: React.FC<TypeReservationStep> = (
   return (
     <>
       <section className="grid grid-cols-2 gap-4  ">
-        <div>
+        <div className="-ml-28 pr-32   ">
           <form onSubmit={(e) => e.preventDefault()}>
             <div className={formClasses['form__wide-row']}>
               <Select
@@ -242,7 +242,17 @@ const HotelDate: React.FC<TypeReservationStep> = (
             </div>
           </form>
         </div>
-        <div>
+        <div
+          style={{
+            transform: 'scale(1.5)',
+          }}
+          className="mr-5 pb-10 relative  "
+        >
+          <div className=" flex absolute top-0  left-[38%] justify-center items-center ">
+            <h1 className="text-xl font-bold uppercase px-4 text-black border-2 ">
+              PALMVERSE
+            </h1>
+          </div>
           <ComposableMap>
             <Geographies geography="/features.json">
               {({ geographies }) =>

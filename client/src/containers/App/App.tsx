@@ -57,7 +57,7 @@ const App: React.FC<TypeAppReduxProps> = (
         activeStep={stepsState.currentStep}
         stepChangeHandler={stepChangeHandler}
       />
-      <main className={'container'}>
+      <div className="m-0 p-0 ">
         <Steps>
           <StepsIndicator
             imgUrl={iconCalendar}
@@ -78,6 +78,8 @@ const App: React.FC<TypeAppReduxProps> = (
             stepChangeHandler={stepChangeHandler}
           />
         </Steps>
+      </div>
+      <main className={'container'}>
         {status === 'pending' && <CircularProgress />}
         {status === 'resolved' && renderStep()}
         {status === 'rejected' && error && (
