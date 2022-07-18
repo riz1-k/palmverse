@@ -10,7 +10,7 @@ type TypeReservationDetailsItemProps = {
 const ReservationDetailsItem: React.FC<
   TypeReservationDetailsItemProps
 > = (props: TypeReservationDetailsItemProps) => (
-  <li className={styleClasses['reservation-details__item']}>
+  <li className="flex justify-between">
     <span
       className={styleClasses['reservation-details__item__title']}
     >

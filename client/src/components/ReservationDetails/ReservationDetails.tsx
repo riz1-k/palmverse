@@ -110,14 +110,26 @@ const ReservationDetails: React.FC<TypeReservationDetailsProps> = (
 
   console.log(selectedHotel);
   return (
-    <div className={elClasses.join(' ')}>
-      <h2 className={styleClasses['reservation-details__title']}>
-        {!!hotels ? hotels[Number(hotelId) - 1].hotel_name : ''}{' '}
+    <div
+      style={{
+        marginRight: '5rem',
+        padding: '1rem 2rem',
+        backgroundColor: 'white',
+      }}
+      className={elClasses.join(' ')}
+    >
+      <h2
+        className={styleClasses['reservation-details__title']}
+        style={{ display: 'flex', justifyContent: 'space-between' }}
+      >
+        <p>
+          {!!hotels ? hotels[Number(hotelId) - 1].hotel_name : ''}{' '}
+        </p>
         {!!hotels && (
           <span>{`(${hotels[Number(hotelId) - 1].city})`}</span>
         )}
       </h2>
-      <ul className={styleClasses['reservation-details__list']}>
+      <ul className="flex flex-col space-y-2">
         {renderDetailsItem('checkin')}
         {renderDetailsItem('checkout')}
         {renderDetailsItem('days')}

@@ -54,13 +54,10 @@ const ImageCheckbox: React.FC<TypeImageCheckboxProps> = ({
     <>
       <div className={wrapperClasses.join(' ')}>
         <h4 className={formClasses['form__label']}>{label}</h4>
-        <div className={checkboxClasses['image-checkboxes__inner']}>
+        <div className="flex flex-col justify-center  ">
           {options.length > 0 &&
             options.map((option: TypeOption, index) => (
-              <div
-                className={checkboxClasses['image-checkbox']}
-                key={index}
-              >
+              <div key={index}>
                 <input
                   type="radio"
                   id={option.id}
